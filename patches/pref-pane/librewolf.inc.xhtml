@@ -1,0 +1,145 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+<script src="chrome://browser/content/preferences/librewolf.js"/>
+
+<html:template id="template-paneLibrewolf">
+
+<hbox class="subcategory" hidden="true" data-category="paneLibrewolf">
+  <html:h1 data-l10n-id="librewolf-header"/>
+</hbox>
+
+<html:setting-group groupid="librewolfBehavior" data-category="paneLibrewolf" hidden="true"/>
+<html:setting-group groupid="librewolfNetworking" style="padding-top: 25px;" data-category="paneLibrewolf" hidden="true"/>
+<html:setting-group groupid="librewolfPrivacy" style="padding-top: 25px;" data-category="paneLibrewolf" hidden="true"/>
+<html:setting-group groupid="librewolfFingerprinting" style="padding-top: 25px;" data-category="paneLibrewolf" hidden="true"/>
+
+<hbox class="subcategory" hidden="true" data-category="paneLibrewolf" style="margin-top: 25px">
+  <html:h1>Appearance</html:h1>
+</hbox>
+<groupbox id="bromineThemeGroup" data-category="paneLibrewolf" hidden="true">
+  <description>Bromine theme, density, and chrome. Changes apply immediately.</description>
+
+  <label value="Theme"/>
+  <radiogroup id="bromine-theme-radiogroup" orient="vertical">
+    <radio value="bromine" label="Bromine (warm orange)"/>
+    <radio value="midnight" label="Bromine Midnight (near-black)"/>
+  </radiogroup>
+
+  <separator/>
+  <label value="Density"/>
+  <radiogroup id="bromine-density-radiogroup" orient="horizontal">
+    <radio value="compact" label="Compact"/>
+    <radio value="normal" label="Normal"/>
+    <radio value="touch" label="Touch"/>
+  </radiogroup>
+
+  <separator/>
+  <label value="Tabs"/>
+  <radiogroup id="bromine-tabs-radiogroup" orient="horizontal">
+    <radio value="underline" label="Underline"/>
+    <radio value="pill" label="Pill"/>
+    <radio value="minimal" label="Minimal"/>
+  </radiogroup>
+
+  <separator/>
+  <label value="Chrome weight"/>
+  <radiogroup id="bromine-chrome-radiogroup" orient="horizontal">
+    <radio value="full" label="Full"/>
+    <radio value="minimal" label="Minimal"/>
+    <radio value="ultralight" label="Ultralight"/>
+  </radiogroup>
+
+  <separator/>
+  <label value="Chrome strip"/>
+  <radiogroup id="bromine-strip-radiogroup" orient="horizontal">
+    <radio value="classic" label="Classic (tabs + URL below)"/>
+    <radio value="unified" label="Unified (one row)"/>
+  </radiogroup>
+  <description class="indent tip-caption">
+    Tip: hold Ctrl and drag the address bar onto the tab row (unified) or below it (classic).
+  </description>
+
+  <separator/>
+  <checkbox id="bromine-hide-single-tab" label="Hide tab bar when only one tab"/>
+  <checkbox id="bromine-content-dark" label="Force dark mode for websites"/>
+
+  <separator/>
+  <label value="Custom accent (CSS color, blank = theme default)"/>
+  <hbox>
+    <html:input id="bromine-accent-input" type="text" placeholder="#e85d04" style="flex: 1; min-width: 12em;"/>
+    <button id="bromine-accent-apply" label="Apply"/>
+    <button id="bromine-accent-clear" label="Clear"/>
+  </hbox>
+</groupbox>
+
+<hbox class="subcategory" hidden="true" data-category="paneLibrewolf" style="margin-top: 25px">
+  <html:h1>Sidebar &amp; layout</html:h1>
+</hbox>
+<groupbox id="bromineRailGroup" data-category="paneLibrewolf" hidden="true">
+  <description>
+    Classic strip (default) or Firefox vertical tabs. Bookmark side rail is disabled in this build.
+  </description>
+  <label value="Sidebar mode"/>
+  <radiogroup id="bromine-sidebar-radiogroup" orient="horizontal">
+    <radio value="classic" label="Classic strip"/>
+    <radio value="sidebar" label="Vertical tabs"/>
+  </radiogroup>
+  <checkbox id="bromine-vertical-tabs" label="Vertical tabs (same as Sidebar mode)"/>
+  <checkbox id="bromine-findbar-compact" label="Compact find bar"/>
+  <checkbox id="bromine-defer-modules" label="Defer chrome modules (faster startup)"/>
+</groupbox>
+
+<hbox class="subcategory" hidden="true" data-category="paneLibrewolf" style="margin-top: 25px">
+  <html:h1>Layout editor</html:h1>
+</hbox>
+<groupbox id="bromineLayoutGroup" data-category="paneLibrewolf" hidden="true">
+  <description>
+    Drag bars (tabs, navbar, bookmarks) to Top / Bottom / Left / Right / Hide.
+    Programmable via about:config → bromine.layout.bars (JSON).
+  </description>
+  <checkbox id="bromine-layout-edit" label="Edit layout (show drag grips + drop zones)"/>
+  <hbox>
+    <button id="bromine-layout-reset" label="Reset layout"/>
+  </hbox>
+  <description class="indent tip-caption">
+    Shortcut: Ctrl+Shift+E · Example JSON:
+    {"tabs":"top","nav":"top","bookmarks":"hidden","rail":"hidden"}
+  </description>
+</groupbox>
+
+<hbox class="subcategory" hidden="true" data-category="paneLibrewolf" style="margin-top: 25px">
+  <html:h1>Everyday extras</html:h1>
+</hbox>
+<groupbox id="bromineExtrasGroup" data-category="paneLibrewolf" hidden="true">
+  <description>
+    Picture-in-Picture is enabled. For sites that ignore dark mode, install Dark Reader
+    from AMO. Containers: install Firefox Multi-Account Containers if you want isolation.
+    Profile backup: run scripts/bromine-profile-pack.sh from the Bromine repo.
+  </description>
+  <hbox>
+    <button id="bromine-open-profile" label="Open profile folder"/>
+  </hbox>
+</groupbox>
+
+<hbox class="subcategory" hidden="true" data-category="paneLibrewolf" style="margin-top: 25px">
+    <html:h1 data-l10n-id="librewolf-footer"/>
+</hbox>
+
+<groupbox data-category="paneLibrewolf" hidden="true">
+  <vbox align="start">
+    <hbox>
+      <button id="librewolf-config-link" is="highlightable-button" flex="1">
+        <image class="librewolf-button-icon" src="chrome://browser/skin/preferences/category-general.svg" />
+        <label data-l10n-id="librewolf-config-link"></label>
+      </button>
+      <button id="librewolf-open-profile" is="highlightable-button" flex="1">
+        <image class="librewolf-button-icon" src="chrome://browser/skin/open.svg" />
+        <label data-l10n-id="librewolf-open-profile"></label>
+      </button>
+    </hbox>
+  </vbox>
+</groupbox>
+
+</html:template>

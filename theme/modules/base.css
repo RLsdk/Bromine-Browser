@@ -1,0 +1,28 @@
+/* Base chrome — tokens + hooks (shell/rail own the modular look) */
+
+:root {
+  --tab-min-height: 30px !important;
+  --toolbarbutton-border-radius: 8px;
+}
+
+#navigator-toolbox {
+  /* shell.css owns modular toolbox; keep a safe fallback */
+  background-color: transparent !important;
+}
+
+#nav-bar,
+#PersonalToolbar,
+#TabsToolbar {
+  background-color: transparent !important;
+}
+
+findbar {
+  background-color: var(--bromine-bg-elevated) !important;
+  color: var(--bromine-fg) !important;
+  border-top: 1px solid var(--bromine-border) !important;
+}
+
+:root[bromine-accent-custom] {
+  --bromine-accent: var(--bromine-user-accent) !important;
+  --bromine-accent-hot: var(--bromine-user-accent) !important;
+}

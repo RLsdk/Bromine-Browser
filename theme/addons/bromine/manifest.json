@@ -1,0 +1,48 @@
+{
+  "manifest_version": 2,
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "bromine@bromine"
+    }
+  },
+  "name": "Bromine",
+  "description": "Official Bromine theme — warm dark surfaces with elemental orange accents.",
+  "author": "Bromine",
+  "version": "1.1.0",
+  "icons": { "32": "icon.svg" },
+  "theme": {
+    "colors": {
+      "frame": "#241c16",
+      "tab_background_text": "#f7f1ea",
+      "toolbar": "#241c16",
+      "toolbar_text": "#f7f1ea",
+      "toolbar_field": "#1a1410",
+      "toolbar_field_text": "#f7f1ea",
+      "toolbar_field_border": "#4a382c",
+      "toolbar_field_focus": "#2a1f18",
+      "toolbar_field_text_focus": "#f7f1ea",
+      "toolbar_field_border_focus": "#e85d04",
+      "toolbar_field_highlight": "#e85d04",
+      "toolbar_field_highlight_text": "#161210",
+      "tab_line": "#e85d04",
+      "tab_selected": "#3a2c22",
+      "popup": "#2a1f18",
+      "popup_text": "#f7f1ea",
+      "popup_border": "#4a382c",
+      "popup_highlight": "#3a2c22",
+      "popup_highlight_text": "#f7f1ea",
+      "sidebar": "#161210",
+      "sidebar_text": "#f7f1ea",
+      "sidebar_border": "#4a382c",
+      "ntp_background": "#161210",
+      "ntp_text": "#f7f1ea",
+      "icons": "#b5a497",
+      "icons_attention": "#e85d04",
+      "button_background_hover": "#3a2c22",
+      "button_background_active": "#4a382c"
+    },
+    "properties": {
+      "color_scheme": "dark"
+    }
+  }
+}

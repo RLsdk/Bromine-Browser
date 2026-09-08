@@ -1,0 +1,14 @@
+/* Bromine optional userContent — drop into chrome/userContent.css if a site
+ * ignores prefers-color-scheme. Prefer Dark Reader for complex sites.
+ *
+ * Enable: toolkit.legacyUserProfileCustomizations.stylesheets = true
+ * Path:   <profile>/chrome/userContent.css
+ */
+
+@-moz-document domain(example.com) {
+  :root {
+    color-scheme: dark !important;
+    background-color: #0c0a09 !important;
+    color: #f7f1ea !important;
+  }
+}

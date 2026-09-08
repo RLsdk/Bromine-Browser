@@ -1,0 +1,376 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* import-globals-from extensionControlled.js */
+/* import-globals-from preferences.js */
+
+ChromeUtils.defineLazyGetter(this, "L10n", () => {
+  return new Localization([
+    "branding/brand.ftl",
+    "browser/preferences/preferences.ftl",
+  ]);
+});
+
+if (!Services.prefs.getBoolPref("browser.settings-redesign.enabled", false)) {
+  Preferences.addAll([
+    // IPv6
+    { id: "network.dns.disableIPv6", type: "bool" },
+    // Firefox Accounts
+    { id: "identity.fxaccounts.enabled", type: "bool" },
+    // WebGL
+    //{ id: "librewolf.webgl.prompt", type: "bool" }, // Already added (see lw-permissions.patch)
+    { id: "librewolf.webgl.prompt.hide", type: "bool" },
+    // Automatically Update Extensions
+    { id: "extensions.update.enabled", type: "bool" },
+    { id: "extensions.update.autoUpdateDefault", type: "bool" },
+    // Clipboard autocopy/paste
+    { id: "clipboard.autocopy", type: "bool" },
+    { id: "middlemouse.paste", type: "bool" },
+    // XOrigin referrers
+    { id: "network.http.referer.XOriginPolicy", type: "int" },
+    // Harden
+    { id: "privacy.resistFingerprinting.letterboxing", type: "bool" },
+    // Google Safe Browsing
+    //{ id: "browser.safebrowsing.malware.enabled", type: "bool" }, // Already loaded
+    //{ id: "browser.safebrowsing.phishing.enabled", type: "bool" },
+    { id: "browser.safebrowsing.blockedURIs.enabled", type: "bool" },
+    { id: "browser.safebrowsing.provider.google4.gethashURL", type: "string" },
+    { id: "browser.safebrowsing.provider.google4.updateURL", type: "string" },
+    { id: "browser.safebrowsing.provider.google.gethashURL", type: "string" },
+    { id: "browser.safebrowsing.provider.google.updateURL", type: "string" },
+    /**** Prefs that require changing a lockPref ****/
+    // Google safe browsing check downloads
+    //{ id: "browser.safebrowsing.downloads.enabled", type: "bool" }, //Also already added
+    { id: "toolkit.legacyUserProfileCustomizations.stylesheets", type: "bool" },
+  ]);
+}
+
+Preferences.addSetting({
+  id: "librewolfExtensionUpdateEnabled",
+  pref: "extensions.update.enabled",
+});
+Preferences.addSetting({
+  id: "librewolfExtensionAutoUpdateEnabled",
+  pref: "extensions.update.autoUpdateDefault",
+});
+Preferences.addSetting({
+  id: "librewolfExtensionUpdate",
+  deps: ["librewolfExtensionUpdateEnabled","librewolfExtensionAutoUpdateEnabled"],
+  get: (_, deps) => deps.librewolfExtensionUpdateEnabled.value && deps.librewolfExtensionAutoUpdateEnabled.value,
+  set: (value, deps) => {
+      deps.librewolfExtensionUpdateEnabled.value = value;
+      deps.librewolfExtensionAutoUpdateEnabled.value = value;
+  },
+});
+
+Preferences.addSetting({
+  id: "librewolfSync",
+  pref: "identity.fxaccounts.enabled",
+  onUserChange() {
+    confirmRestartPrompt(
+      Services.prefs.getBoolPref("identity.fxaccounts.enabled"),
+      1,
+      true,
+      false
+    ).then(buttonIndex => {
+      if (buttonIndex == CONFIRM_RESTART_PROMPT_RESTART_NOW) {
+          Services.startup.quit(
+            Ci.nsIAppStartup.eAttemptQuit | Ci.nsIAppStartup.eRestart
+          );
+          return
+        }
+    });
+  }
+});
+
+Preferences.addSetting({
+  id: "librewolfAutocopy",
+  pref: "clipboard.autocopy",
+});
+Preferences.addSetting({
+  id: "librewolfPaste",
+  pref: "middlemouse.paste",
+});
+Preferences.addSetting({
+  id: "librewolfMiddleClick",
+  deps: ["librewolfAutocopy","librewolfPaste"],
+  get: (_, deps) => deps.librewolfAutocopy.value && deps.librewolfPaste.value,
+  set: (value, deps) => {
+      deps.librewolfAutocopy.value = value;
+      deps.librewolfPaste.value = value;
+  },
+});
+
+Preferences.addSetting({
+  id: "librewolfUserChrome",
+  pref: "toolkit.legacyUserProfileCustomizations.stylesheets",
+});
+
+Preferences.addSetting({
+  id: "librewolfIPv6",
+  pref: "network.dns.disableIPv6",
+  get: (value) => value.value = !value,
+  set: (value) => value.value = !value,
+});
+
+Preferences.addSetting({
+  id: "librewolfCrossOrigin",
+  pref: "network.http.referer.XOriginPolicy",
+  get: (value) => {
+    if (value == 2) {
+      return true;
+    } else {
+      return false;
+    }
+  },
+  set: (value) => value ? 2 : 0,
+});
+
+Preferences.addSetting({
+  id: "librewolfRFP",
+  pref: "privacy.resistFingerprinting",
+});
+Preferences.addSetting({
+  id: "librewolfLetterboxing",
+  pref: "privacy.resistFingerprinting.letterboxing",
+});
+
+Preferences.addSetting({
+  id: "librewolfWebGLPrompt",
+  pref: "librewolf.webgl.prompt",
+  get: (value) => value.value = !value,
+  set: (value) => value.value = !value,
+});
+Preferences.addSetting({
+  id: "librewolfWebGLPromptHide",
+  pref: "librewolf.webgl.prompt.hide",
+  deps: ["librewolfWebGLPrompt"],
+  disabled: ({librewolfWebGLPrompt}) => {
+    return librewolfWebGLPrompt.value;
+  },
+});
+
+
+function openProfileDirectory() {
+  // Get the profile directory.
+  let currProfD = Services.dirsvc.get("ProfD", Ci.nsIFile);
+  let profileDir = currProfD.path;
+
+  // Show the profile directory.
+  let nsLocalFile = Components.Constructor(
+    "@mozilla.org/file/local;1",
+    "nsIFile",
+    "initWithPath"
+  );
+  new nsLocalFile(profileDir).reveal();
+}
+
+function openAboutConfig() {
+  window.open("about:config", "_blank");
+}
+
+function syncBromineRadios(id, pref, fallback) {
+  const group = document.getElementById(id);
+  if (!group) {
+    return;
+  }
+  group.value = Services.prefs.getStringPref(pref, fallback);
+}
+
+function onBromineRadioSelect(pref, event) {
+  const value = event.target.value;
+  if (!value) {
+    return;
+  }
+  Services.prefs.setStringPref(pref, value);
+}
+
+function syncBromineAppearance() {
+  syncBromineRadios("bromine-theme-radiogroup", "bromine.theme", "bromine");
+  syncBromineRadios("bromine-density-radiogroup", "bromine.density", "compact");
+  syncBromineRadios("bromine-tabs-radiogroup", "bromine.tabs", "underline");
+  syncBromineRadios("bromine-chrome-radiogroup", "bromine.chrome", "minimal");
+  syncBromineRadios("bromine-strip-radiogroup", "bromine.chrome.strip", "classic");
+  syncBromineRadios("bromine-sidebar-radiogroup", "bromine.sidebarMode", "classic");
+  syncBromineRadios("bromine-rail-position-radiogroup", "bromine.rail.position", "left");
+  syncBromineRadios("bromine-rail-source-radiogroup", "bromine.rail.source", "toolbar");
+
+  const hide = document.getElementById("bromine-hide-single-tab");
+  if (hide) {
+    hide.checked = Services.prefs.getBoolPref("bromine.hideSingleTab", false);
+  }
+  const dark = document.getElementById("bromine-content-dark");
+  if (dark) {
+    dark.checked =
+      Services.prefs.getIntPref(
+        "layout.css.prefers-color-scheme.content-override",
+        2
+      ) === 2;
+  }
+  const accent = document.getElementById("bromine-accent-input");
+  if (accent) {
+    accent.value = Services.prefs.getStringPref("bromine.accent", "");
+  }
+  const rail = document.getElementById("bromine-rail-enabled");
+  if (rail) {
+    rail.checked = Services.prefs.getBoolPref("bromine.rail.enabled", false);
+  }
+  const vert = document.getElementById("bromine-vertical-tabs");
+  if (vert) {
+    vert.checked = Services.prefs.getBoolPref("bromine.verticalTabs", false);
+  }
+  const find = document.getElementById("bromine-findbar-compact");
+  if (find) {
+    find.checked = Services.prefs.getBoolPref("bromine.findbarCompact", true);
+  }
+  const defer = document.getElementById("bromine-defer-modules");
+  if (defer) {
+    defer.checked = Services.prefs.getBoolPref(
+      "bromine.performance.deferChromeModules",
+      true
+    );
+  }
+  const layoutEdit = document.getElementById("bromine-layout-edit");
+  if (layoutEdit) {
+    layoutEdit.checked = Services.prefs.getBoolPref("bromine.layout.editMode", false);
+  }
+}
+
+function wireBromineAppearance() {
+  const pairs = [
+    ["bromine-theme-radiogroup", "bromine.theme"],
+    ["bromine-density-radiogroup", "bromine.density"],
+    ["bromine-tabs-radiogroup", "bromine.tabs"],
+    ["bromine-chrome-radiogroup", "bromine.chrome"],
+    ["bromine-strip-radiogroup", "bromine.chrome.strip"],
+    ["bromine-sidebar-radiogroup", "bromine.sidebarMode"],
+    ["bromine-rail-position-radiogroup", "bromine.rail.position"],
+    ["bromine-rail-source-radiogroup", "bromine.rail.source"],
+  ];
+  for (const [id, pref] of pairs) {
+    const group = document.getElementById(id);
+    if (group) {
+      group.addEventListener("select", event => onBromineRadioSelect(pref, event));
+    }
+  }
+
+  const hide = document.getElementById("bromine-hide-single-tab");
+  if (hide) {
+    hide.addEventListener("command", () => {
+      Services.prefs.setBoolPref("bromine.hideSingleTab", hide.checked);
+    });
+  }
+  const dark = document.getElementById("bromine-content-dark");
+  if (dark) {
+    dark.addEventListener("command", () => {
+      Services.prefs.setIntPref(
+        "layout.css.prefers-color-scheme.content-override",
+        dark.checked ? 2 : 0
+      );
+      Services.prefs.setBoolPref("bromine.contentDark", dark.checked);
+    });
+  }
+
+  const rail = document.getElementById("bromine-rail-enabled");
+  if (rail) {
+    rail.addEventListener("command", () => {
+      Services.prefs.setBoolPref("bromine.rail.enabled", rail.checked);
+    });
+  }
+  const vert = document.getElementById("bromine-vertical-tabs");
+  if (vert) {
+    vert.addEventListener("command", () => {
+      Services.prefs.setBoolPref("bromine.verticalTabs", vert.checked);
+      Services.prefs.setStringPref(
+        "bromine.sidebarMode",
+        vert.checked ? "sidebar" : "classic"
+      );
+      syncBromineRadios(
+        "bromine-sidebar-radiogroup",
+        "bromine.sidebarMode",
+        "classic"
+      );
+    });
+  }
+  const find = document.getElementById("bromine-findbar-compact");
+  if (find) {
+    find.addEventListener("command", () => {
+      Services.prefs.setBoolPref("bromine.findbarCompact", find.checked);
+    });
+  }
+  const defer = document.getElementById("bromine-defer-modules");
+  if (defer) {
+    defer.addEventListener("command", () => {
+      Services.prefs.setBoolPref(
+        "bromine.performance.deferChromeModules",
+        defer.checked
+      );
+    });
+  }
+  const layoutEdit = document.getElementById("bromine-layout-edit");
+  if (layoutEdit) {
+    layoutEdit.addEventListener("command", () => {
+      Services.prefs.setBoolPref("bromine.layout.editMode", layoutEdit.checked);
+    });
+  }
+  const layoutReset = document.getElementById("bromine-layout-reset");
+  if (layoutReset) {
+    layoutReset.addEventListener("command", () => {
+      Services.prefs.setStringPref(
+        "bromine.layout.bars",
+        JSON.stringify({
+          tabs: "top",
+          nav: "top",
+          bookmarks: "hidden",
+          rail: "hidden",
+        })
+      );
+      Services.prefs.setBoolPref("bromine.layout.editMode", false);
+      syncBromineAppearance();
+    });
+  }
+
+  const apply = document.getElementById("bromine-accent-apply");
+  const clear = document.getElementById("bromine-accent-clear");
+  const input = document.getElementById("bromine-accent-input");
+  if (apply && input) {
+    apply.addEventListener("command", () => {
+      Services.prefs.setStringPref("bromine.accent", input.value.trim());
+    });
+  }
+  if (clear && input) {
+    clear.addEventListener("command", () => {
+      input.value = "";
+      Services.prefs.setStringPref("bromine.accent", "");
+    });
+  }
+  const openProf = document.getElementById("bromine-open-profile");
+  if (openProf) {
+    openProf.addEventListener("command", openProfileDirectory);
+  }
+}
+
+var gLibrewolfPane = {
+  _pane: null,
+
+  // called when the document is first parsed
+  init() {
+    this._pane = document.getElementById("paneLibrewolf");
+    initSettingGroup("librewolfBehavior");
+    initSettingGroup("librewolfNetworking");
+    initSettingGroup("librewolfPrivacy");
+    initSettingGroup("librewolfFingerprinting");
+
+    // Set event listener on open profile directory button
+    setEventListener("librewolf-open-profile", "command", openProfileDirectory);
+    // Set event listener on open about:config button
+    setEventListener("librewolf-config-link", "click", openAboutConfig);
+
+    syncBromineAppearance();
+    wireBromineAppearance();
+
+    // Notify observers that the UI is now ready
+    Services.obs.notifyObservers(window, "librewolf-pane-loaded");
+  },
+};

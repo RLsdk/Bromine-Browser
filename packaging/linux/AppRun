@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# AppRun for Bromine AppImage — portable across Arch and other Linux distros.
+set -euo pipefail
+
+HERE="$(dirname "$(readlink -f "$0")")"
+APP="${HERE}/usr/lib/bromine"
+
+if [[ ! -x "${APP}/bromine" ]]; then
+  echo "Bromine binary missing in AppImage (${APP}/bromine)" >&2
+  exit 1
+fi
+
+# Prefer package icons / desktop without a system install
+export XDG_DATA_DIRS="${HERE}/usr/share${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}"
+
+# Common GPU / Wayland helpers — do not force; let the host decide
+export MOZ_ENABLE_WAYLAND="${MOZ_ENABLE_WAYLAND:-1}"
+
+# Keep profile under XDG (matches Bromine branding), not next to the AppImage
+# unless the user already set MOZ_LEGACY_PROFILES / HOME overrides.
+
+cd "$APP"
+exec ./bromine "$@"

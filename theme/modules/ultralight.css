@@ -1,0 +1,17 @@
+/* Ultralight / minimal — keep single-strip shell intact */
+
+:root[bromine-chrome="ultralight"] {
+  --bromine-strip-height: 36px;
+}
+
+:root[bromine-chrome="ultralight"] .toolbarbutton-1 {
+  scale: 0.96;
+}
+
+:root[bromine-chrome="minimal"] #navigator-toolbox {
+  border-bottom-width: 0 !important;
+}
+
+:root[bromine-chrome="ultralight"] {
+  scrollbar-width: thin;
+}

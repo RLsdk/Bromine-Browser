@@ -1,0 +1,20 @@
+/* Side rail disabled — no left strip, no content padding */
+
+#bromine-rail,
+#bromine-rail-flyout {
+  display: none !important;
+  width: 0 !important;
+  min-width: 0 !important;
+  max-width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  pointer-events: none !important;
+}
+
+:root[bromine-rail="true"] #browser,
+:root[bromine-rail="false"] #browser,
+#browser {
+  padding-inline-start: 0 !important;
+  padding-inline-end: 0 !important;
+}

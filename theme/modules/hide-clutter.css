@@ -1,0 +1,60 @@
+/* Strip Firefox chrome clutter for a lighter UI */
+#save-to-pocket-button,
+#fxa-toolbar-menu-button,
+#firefox-view-button,
+#alltabs-button,
+#tracking-protection-icon-container,
+#identity-permission-box,
+#page-action-buttons > #star-button-box,
+#urlbar-go-button,
+#reader-mode-button,
+#picture-in-picture-button {
+  /* keep identity box; hide pocket / fxa / firefox view */
+}
+
+#save-to-pocket-button,
+#fxa-toolbar-menu-button,
+#firefox-view-button {
+  display: none !important;
+}
+
+/* Quieter titlebar / toolbox separators */
+#navigator-toolbox {
+  --tabs-navbar-shadow-size: 0 !important;
+  background-image: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  animation: none !important;
+}
+
+titlebar {
+  --tabs-navbar-shadow-size: 0 !important;
+}
+
+/* Kill chrome animation/transition noise (WebRender-friendly).
+ * Do NOT use `#navigator-toolbox *` — that nuked urlbar panel paint. */
+#navigator-toolbox,
+#TabsToolbar,
+#nav-bar,
+#bromine-leading,
+#bromine-newtab-button,
+.titlebar-buttonbox-container,
+.tabbrowser-tab,
+.tab-background {
+  animation: none !important;
+  transition: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+:root[bromine-chrome="ultralight"] * {
+  transition-duration: 0.01ms !important;
+  animation-duration: 0.01ms !important;
+}

@@ -1,0 +1,34 @@
+# OS / editor
+.DS_Store
+.directory
+.vscode/
+.idea/
+*.swp
+*~
+
+# Build / Firefox trees
+/firefox-*
+/librewolf-*
+/quiet-*
+/bromine-*/
+/mozilla-unified
+/obj-*/
+*.source.tar.gz
+*.source.tar.xz
+
+# Packages & AppImages
+*.tar.xz
+*.tar.gz
+*.AppImage
+*.AppImage.sha256
+/dist/
+*.sha256sum
+*.sha512sum
+*.sig
+
+# Patch check noise
+patchfail.out
+patchfail-fuzz.out
+
+# Local caches
+.cache/

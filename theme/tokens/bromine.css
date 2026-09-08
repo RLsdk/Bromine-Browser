@@ -1,0 +1,47 @@
+/* Bromine theme tokens — brand (default) + midnight only */
+
+/* Brand “Bromine” — warmer elevated chrome, strong orange.
+ * Only apply when the Bromine LWT is active (no bare :root — that blocked
+ * Light/Dark/other themes from showing in browser chrome). */
+:root[bromine-theme="bromine"] {
+  --bromine-bg: #161210;
+  --bromine-bg-elevated: #241c16;
+  --bromine-fg: #f7f1ea;
+  --bromine-fg-muted: #b5a497;
+  --bromine-accent: #e85d04;
+  --bromine-accent-hot: #ff7b1c;
+  --bromine-accent-fg: #161210;
+  --bromine-border: #4a382c;
+  --bromine-tab-radius: 8px;
+  --bromine-chrome-pad: 2px;
+  --bromine-urlbar-bg: #1a1410;
+  --bromine-urlbar-panel: #2a1f18;
+  --bromine-urlbar-panel-row: #3a2c22;
+  --bromine-popup-bg: #2a1f18;
+  --bromine-popup-fg: #f7f1ea;
+  --bromine-toolbar-bg: #241c16;
+  --bromine-module-radius: 12px;
+  --bromine-module-gap: 8px;
+}
+
+/* “Bromine Midnight” — cooler near-black, muted ember accent */
+:root[bromine-theme="midnight"] {
+  --bromine-bg: #0a0908;
+  --bromine-bg-elevated: #12100e;
+  --bromine-fg: #e8e0d8;
+  --bromine-fg-muted: #8a7e74;
+  --bromine-accent: #c44d0a;
+  --bromine-accent-hot: #a33d08;
+  --bromine-accent-fg: #0a0908;
+  --bromine-border: #2a2420;
+  --bromine-tab-radius: 8px;
+  --bromine-chrome-pad: 2px;
+  --bromine-urlbar-bg: #0c0a09;
+  --bromine-urlbar-panel: #141210;
+  --bromine-urlbar-panel-row: #1e1a17;
+  --bromine-popup-bg: #141210;
+  --bromine-popup-fg: #e8e0d8;
+  --bromine-toolbar-bg: #12100e;
+  --bromine-module-radius: 12px;
+  --bromine-module-gap: 8px;
+}

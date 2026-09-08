@@ -1,0 +1,60 @@
+# Maintainer: Bromine packaging
+# Portable AppImage package for Arch / CachyOS / EndeavourOS.
+#
+# Build from the Bromine overlay (after make package + wrap):
+#   ./scripts/build-appimage.sh
+#   cd packaging/arch && makepkg -si
+#
+# Or point source at a released AppImage URL.
+
+pkgname=bromine-appimage
+pkgver=155.0.1
+pkgrel=1
+pkgdesc="Privacy-first Firefox-based browser (AppImage)"
+arch=('x86_64')
+url="https://github.com"
+license=('MPL-2.0')
+depends=('zlib' 'fuse2' 'gtk3' 'dbus-glib' 'libpulse' 'nss' 'libxt')
+provides=('bromine' 'bromine-bin')
+conflicts=('bromine' 'bromine-bin')
+options=(!strip)
+# Prefer local dist/ artifact produced by scripts/build-appimage.sh
+source=("Bromine-${pkgver}-${pkgrel}-x86_64.AppImage")
+sha256sums=('SKIP')
+
+prepare() {
+  # Allow building against ../dist without copying
+  if [[ ! -f "$srcdir/Bromine-${pkgver}-${pkgrel}-x86_64.AppImage" ]]; then
+    local dist
+    dist="$(cd "$startdir/../.." && pwd)/dist/Bromine-${pkgver}-${pkgrel}-x86_64.AppImage"
+    if [[ -f "$dist" ]]; then
+      ln -sf "$dist" "$srcdir/Bromine-${pkgver}-${pkgrel}-x86_64.AppImage"
+    else
+      echo "Place Bromine-${pkgver}-${pkgrel}-x86_64.AppImage in this directory or run scripts/build-appimage.sh first" >&2
+      return 1
+    fi
+  fi
+  chmod +x "Bromine-${pkgver}-${pkgrel}-x86_64.AppImage"
+}
+
+package() {
+  install -Dm755 "Bromine-${pkgver}-${pkgrel}-x86_64.AppImage" \
+    "$pkgdir/opt/bromine/Bromine.AppImage"
+  install -d "$pkgdir/usr/bin"
+  ln -s /opt/bromine/Bromine.AppImage "$pkgdir/usr/bin/bromine"
+
+  # Desktop + icon from AppImage metadata (best-effort extract)
+  install -Dm644 /dev/null "$pkgdir/usr/share/applications/bromine.desktop" 2>/dev/null || true
+  if command -v bsdtar >/dev/null; then
+    # AppImages are ISO9660; extraction may fail — fall back to shipping desktop from overlay
+    :
+  fi
+  local overlay
+  overlay="$(cd "$startdir/../.." && pwd)"
+  if [[ -f "$overlay/packaging/linux/bromine.desktop" ]]; then
+    install -Dm644 "$overlay/packaging/linux/bromine.desktop" \
+      "$pkgdir/usr/share/applications/bromine.desktop"
+    # Point Exec at installed AppImage wrapper
+    sed -i 's|^Exec=.*|Exec=bromine %u|' "$pkgdir/usr/share/applications/bromine.desktop"
+  fi
+}

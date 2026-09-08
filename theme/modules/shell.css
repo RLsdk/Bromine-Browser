@@ -1,0 +1,999 @@
+/* Floating card shell + single dark toolbar strip */
+
+:root {
+  --bromine-canvas: var(--bromine-bg, #12100e);
+  --bromine-chrome-strip: var(--bromine-bg-elevated, #1c1815);
+  --bromine-tab-inactive: color-mix(in srgb, var(--bromine-fg, #f3ebe4) 10%, transparent);
+  --bromine-tab-active: color-mix(in srgb, var(--bromine-fg, #f3ebe4) 16%, var(--bromine-bg, #12100e));
+  --bromine-chrome-ink: var(--bromine-fg, #f3ebe4);
+  --bromine-chrome-ink-soft: var(--bromine-fg-muted, #a8988c);
+  --bromine-chrome-label: var(--bromine-fg-muted, #a8988c);
+  --bromine-chrome-label-active: var(--bromine-fg, #f3ebe4);
+  --bromine-hairline: color-mix(in srgb, var(--bromine-fg, #f3ebe4) 10%, transparent);
+  --bromine-window-radius: 12px;
+  --bromine-inset-top: 0px;
+  --bromine-inset-right: 0px;
+  --bromine-inset-bottom: 0px;
+  --bromine-inset-left: 0px;
+  --bromine-strip-height: 40px;
+  --bromine-module-radius: 8px;
+  --bromine-module-gap: 0px;
+  --bromine-module-pad: 0px;
+  --bromine-module-border: transparent;
+  --bromine-module-bg: var(--bromine-chrome-strip);
+  --bromine-module-bg-soft: var(--bromine-chrome-strip);
+  --bromine-module-shine: none;
+  --bromine-module-shadow: none;
+  --bromine-glass: var(--bromine-chrome-strip);
+  --bromine-glass-strong: var(--bromine-chrome-strip);
+  --bromine-workspace-bg: var(--bromine-canvas);
+  --bromine-workspace-glow: none;
+}
+
+/*
+ * Edge-to-edge chrome inside the OS window (no inset gap).
+ * Outer hairline + radius clip on #main-window only.
+ */
+#main-window {
+  background-color: var(--bromine-chrome-strip) !important;
+  background-image: none !important;
+  border: 1px solid var(--bromine-hairline) !important;
+  border-radius: var(--bromine-window-radius) !important;
+  outline: none !important;
+  box-shadow: none !important;
+  overflow: clip !important;
+  clip-path: none !important;
+}
+
+#main-window[sizemode="maximized"],
+#main-window[sizemode="fullscreen"] {
+  --bromine-window-radius: 0px;
+  border: none !important;
+  border-radius: 0 !important;
+  overflow: hidden !important;
+}
+
+/* —— Chrome toolbox (unified = one strip; classic = tabs + nav) —— */
+#navigator-toolbox {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 0 !important;
+  box-sizing: border-box !important;
+  height: var(--bromine-strip-height) !important;
+  min-height: var(--bromine-strip-height) !important;
+  max-height: var(--bromine-strip-height) !important;
+  margin: 0 !important;
+  padding: 0 4px 0 8px !important;
+  border: none !important;
+  border-radius: 0 !important;
+  background: var(--bromine-chrome-strip) !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  animation: none !important;
+  overflow: hidden !important;
+  color: var(--bromine-chrome-ink) !important;
+
+  --toolbar-bgcolor: var(--bromine-chrome-strip) !important;
+  --toolbar-color: var(--bromine-chrome-ink) !important;
+  --toolbar-field-background-color: var(--bromine-urlbar-bg) !important;
+  --toolbar-field-color: var(--bromine-chrome-label) !important;
+  --toolbar-field-border-color: var(--bromine-border) !important;
+  --toolbar-field-focus-background-color: var(--bromine-urlbar-bg) !important;
+  --toolbarbutton-icon-fill: var(--bromine-chrome-ink-soft) !important;
+  --lwt-toolbarbutton-icon-fill: var(--bromine-chrome-ink-soft) !important;
+  --arrowpanel-background: var(--bromine-popup-bg, var(--bromine-bg-elevated)) !important;
+  --arrowpanel-color: var(--bromine-popup-fg, var(--bromine-fg)) !important;
+  --arrowpanel-border-color: var(--bromine-border) !important;
+  --panel-background: var(--bromine-popup-bg, var(--bromine-bg-elevated)) !important;
+  --panel-color: var(--bromine-popup-fg, var(--bromine-fg)) !important;
+  --panel-border-color: var(--bromine-border) !important;
+  --autocomplete-popup-background: var(--bromine-urlbar-panel, var(--bromine-bg-elevated)) !important;
+  --autocomplete-popup-color: var(--bromine-popup-fg, var(--bromine-fg)) !important;
+  --autocomplete-popup-highlight-background: var(--bromine-urlbar-panel-row) !important;
+  --autocomplete-popup-highlight-color: var(--bromine-fg) !important;
+  --button-bgcolor: transparent !important;
+  --button-hover-bgcolor: color-mix(in srgb, var(--bromine-fg) 10%, transparent) !important;
+  --button-active-bgcolor: color-mix(in srgb, var(--bromine-fg) 14%, transparent) !important;
+  --tab-selected-bgcolor: var(--bromine-tab-active) !important;
+  --tab-hover-background-color: color-mix(in srgb, var(--bromine-fg) 8%, transparent) !important;
+  --tab-loading-fill: var(--bromine-chrome-ink-soft) !important;
+  --chrome-content-separator-color: transparent !important;
+  --tabs-navbar-shadow-size: 0 !important;
+}
+
+/* Classic Firefox: tabs row, then URL / nav row below */
+:root[bromine-chrome-strip="classic"] #navigator-toolbox {
+  flex-direction: column !important;
+  align-items: stretch !important;
+  height: auto !important;
+  min-height: calc(var(--bromine-strip-height) * 2) !important;
+  max-height: none !important;
+  padding: 0 !important;
+  overflow: visible !important;
+}
+
+:root[bromine-chrome-strip="classic"] #titlebar {
+  order: 1 !important;
+  flex: 0 0 auto !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  contain: layout style !important;
+}
+
+:root[bromine-chrome-strip="classic"] #TabsToolbar {
+  width: 100% !important;
+  padding: 0 4px 0 8px !important;
+  contain: layout style !important;
+}
+
+:root[bromine-chrome-strip="classic"] #nav-bar {
+  order: 2 !important;
+  display: flex !important;
+  flex: 0 0 auto !important;
+  flex-shrink: 0 !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  padding: 0 8px !important;
+  /* layout contain clips the urlbar results panel */
+  contain: style !important;
+  overflow: visible !important;
+}
+
+:root[bromine-chrome-strip="classic"] #nav-bar-customization-target {
+  display: flex !important;
+  flex: 1 1 auto !important;
+  align-items: center !important;
+  min-width: 0 !important;
+  overflow: visible !important;
+}
+
+/* When urlbar is open, never clip its results panel */
+#urlbar-container:has(#urlbar[open]),
+#urlbar-container:has(#urlbar[breakout-extend]),
+#nav-bar:has(#urlbar[open]),
+#nav-bar:has(#urlbar[breakout-extend]) {
+  overflow: visible !important;
+  contain: none !important;
+  z-index: 4 !important;
+}
+
+
+:root[bromine-chrome-strip="classic"] #urlbar-container {
+  order: 0 !important;
+  max-width: none !important;
+  min-width: 160px !important;
+  flex: 1 1 auto !important;
+  flex-shrink: 1 !important;
+  margin-inline: 0 8px !important;
+  transition: none !important;
+  transform: none !important;
+}
+
+/* Keep tabs content-sized so + hugs the last tab (not far right).
+ * Still requires min-width floor from the shared #tabbrowser-tabs rule. */
+:root[bromine-chrome-strip="classic"] #tabbrowser-tabs {
+  flex: 0 0 auto !important;
+  flex-grow: 0 !important;
+  flex-shrink: 0 !important;
+  min-width: 160px !important;
+}
+
+#titlebar,
+#toolbar-menubar {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+#toolbar-menubar {
+  display: none !important;
+}
+
+#titlebar {
+  order: 2 !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  height: var(--bromine-strip-height) !important;
+}
+
+#TabsToolbar {
+  order: unset !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  flex: 1 1 auto !important;
+  width: 100% !important;
+  min-height: var(--bromine-strip-height) !important;
+  height: var(--bromine-strip-height) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  -moz-window-dragging: drag;
+  contain: layout style !important;
+}
+
+/*
+ * CRITICAL — known-good tab strip (user-approved). See
+ * .cursor/rules/tabs-must-stay-visible.mdc before changing.
+ * JS _placeNewTabButton owns pixel width + --bromine-tab-width.
+ */
+#tabbrowser-tabs {
+  visibility: visible !important;
+  opacity: 1 !important;
+  flex: 0 0 auto !important;
+  flex-grow: 0 !important;
+  flex-shrink: 0 !important;
+  min-width: 160px !important; /* NEVER 0 */
+  max-width: calc(100% - 160px) !important;
+  overflow: visible !important;
+  margin-inline-start: 0 !important;
+  padding-inline-start: 0 !important;
+  --tab-overflow-clip-margin: 0px !important;
+}
+
+/* Overflow arrows — hide element IDs and shadow ::part (Firefox 120+)
+ * Brief overflow during new-tab load was shoving tabs right, then snap-back.
+ */
+#scrollbutton-up,
+#scrollbutton-down,
+#tabbrowser-arrowscrollbox > #scrollbutton-up,
+#tabbrowser-arrowscrollbox > #scrollbutton-down,
+#tabbrowser-tabs #scrollbutton-up,
+#tabbrowser-tabs #scrollbutton-down {
+  display: none !important;
+  visibility: collapse !important;
+  width: 0 !important;
+  min-width: 0 !important;
+  max-width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  pointer-events: none !important;
+}
+
+#tabbrowser-arrowscrollbox::part(scrollbutton-up),
+#tabbrowser-arrowscrollbox::part(scrollbutton-down),
+#tabbrowser-tabs > arrowscrollbox::part(scrollbutton-up),
+#tabbrowser-tabs > arrowscrollbox::part(scrollbutton-down) {
+  display: none !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  min-width: 0 !important;
+  max-width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* The left "dot" on new-tab: radial overflow-start-indicator spacer */
+#tabbrowser-arrowscrollbox::part(overflow-start-indicator),
+#tabbrowser-arrowscrollbox::part(overflow-end-indicator),
+#tabbrowser-tabs > arrowscrollbox::part(overflow-start-indicator),
+#tabbrowser-tabs > arrowscrollbox::part(overflow-end-indicator),
+#pinned-tabs-container::part(overflow-start-indicator),
+#pinned-tabs-container::part(overflow-end-indicator) {
+  display: none !important;
+  visibility: collapse !important;
+  width: 0 !important;
+  min-width: 0 !important;
+  max-width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  opacity: 0 !important;
+  background: none !important;
+  background-image: none !important;
+  border: none !important;
+  pointer-events: none !important;
+  transition: none !important;
+}
+
+#tabbrowser-tabs[overflow],
+#tabbrowser-arrowscrollbox[overflowing] {
+  /* keep strip geometry stable while we clear overflow in JS */
+  padding-inline-start: 0 !important;
+  margin-inline-start: 0 !important;
+}
+
+#tabbrowser-arrowscrollbox,
+#tabbrowser-tabs > arrowscrollbox {
+  visibility: visible !important;
+  min-width: 140px !important; /* NEVER 0 */
+  flex: 0 0 auto !important;
+  max-width: none !important;
+  margin-inline-start: 0 !important;
+  padding-inline-start: 0 !important;
+  scroll-padding-inline-start: 0 !important;
+  overflow-clip-margin: 0 !important;
+}
+
+#tabbrowser-arrowscrollbox::part(scrollbox),
+#tabbrowser-tabs > arrowscrollbox::part(scrollbox) {
+  padding-inline-start: 0 !important;
+  margin-inline-start: 0 !important;
+  scroll-padding-inline-start: 0 !important;
+}
+
+/* Keep the first tab fully on-screen — no negative clip / lead-in */
+#tabbrowser-arrowscrollbox .scrollbox-clip,
+#tabbrowser-arrowscrollbox scrollbox,
+#tabbrowser-tabs scrollbox {
+  margin-inline-start: 0 !important;
+  padding-inline-start: 0 !important;
+}
+
+.tabbrowser-tab {
+  visibility: visible !important;
+  opacity: 1 !important;
+  flex: 0 0 auto !important;
+  min-width: var(--bromine-tab-min, 76px) !important;
+  width: var(--bromine-tab-width, 150px) !important;
+  max-width: var(--bromine-tab-width, 150px) !important;
+  transition: none !important;
+}
+
+.tabbrowser-tab[first-visible-tab],
+.tabbrowser-tab:first-of-type {
+  margin-inline-start: 0 !important;
+}
+
+#TabsToolbar .titlebar-buttonbox-container {
+  flex-shrink: 0 !important;
+  margin-inline-start: 0 !important;
+}
+
+#TabsToolbar .titlebar-spacer[type="post-tabs"] {
+  display: none !important;
+}
+
+/* Nav cluster + inline URL live on the same row (left of tabs) */
+#nav-bar {
+  order: 1 !important;
+  flex: 0 1 auto !important;
+  width: auto !important;
+  max-width: min(42vw, 360px) !important;
+  min-width: 0 !important;
+  min-height: var(--bromine-strip-height) !important;
+  height: var(--bromine-strip-height) !important;
+  margin: 0 !important;
+  padding: 0 2px 0 0 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+/* Unified only: collapse leftover nav-bar once URL lives on the tab strip */
+:root[bromine-chrome-strip="unified"] #nav-bar:not(:has(#urlbar-container)),
+:root[bromine-unified-chrome="true"]:not([bromine-chrome-strip="classic"])
+  #nav-bar:not(:has(#urlbar-container)) {
+  display: none !important;
+}
+
+#PersonalToolbar {
+  display: none !important;
+  visibility: collapse !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  max-height: 0 !important;
+}
+
+/* Nav glyphs — 16px, dark gray, ~20px apart */
+#nav-bar toolbarnavbox,
+#nav-bar .toolbaritem-combined-buttons,
+#TabsToolbar #back-button,
+#TabsToolbar #forward-button,
+#TabsToolbar #reload-button,
+#TabsToolbar #home-button,
+#TabsToolbar #sidebar-button,
+#nav-bar #back-button,
+#nav-bar #forward-button,
+#nav-bar #reload-button,
+#nav-bar #home-button,
+#nav-bar #sidebar-button {
+  margin: 0 !important;
+}
+
+#TabsToolbar .toolbarbutton-1,
+#nav-bar .toolbarbutton-1 {
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  padding: 0 !important;
+  margin-inline: 4px !important;
+  border-radius: 6px !important;
+  color: var(--bromine-chrome-ink-soft) !important;
+  fill: var(--bromine-chrome-ink-soft) !important;
+  -moz-context-properties: fill, fill-opacity !important;
+}
+
+#TabsToolbar .toolbarbutton-1 .toolbarbutton-icon,
+#nav-bar .toolbarbutton-1 .toolbarbutton-icon {
+  width: 16px !important;
+  height: 16px !important;
+}
+
+/* Leading cluster: settings + burger only */
+#bromine-leading {
+  display: flex !important;
+  align-items: center !important;
+  flex-shrink: 0 !important;
+  order: -2 !important;
+  margin-inline: 2px 0 !important;
+  padding-inline-end: 10px !important;
+  -moz-window-dragging: no-drag;
+  position: relative !important;
+}
+
+#bromine-leading::after {
+  content: "" !important;
+  position: absolute !important;
+  right: 0 !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 1px !important;
+  height: 18px !important;
+  background: color-mix(in srgb, var(--bromine-fg) 22%, transparent) !important;
+  pointer-events: none !important;
+}
+
+#bromine-leading > * {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+#bromine-settings-button,
+#bromine-leading #PanelUI-menu-button,
+#bromine-leading #PanelUI-button > toolbarbutton {
+  width: 30px !important;
+  height: 30px !important;
+  min-width: 30px !important;
+  margin-inline: 3px !important;
+  padding: 0 !important;
+  border-radius: 6px !important;
+  color: #f3ebe4 !important;
+  fill: #f3ebe4 !important;
+  -moz-context-properties: fill, fill-opacity !important;
+}
+
+#bromine-settings-button {
+  list-style-image: none !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23f3ebe4'%3E%3Cpath d='M8 10.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z'/%3E%3Cpath d='M12.9 8.7c.04-.23.06-.47.06-.7s-.02-.47-.06-.7l1.52-1.19a.38.38 0 0 0 .09-.48L12.97 3.1a.38.38 0 0 0-.45-.17l-1.79.72a5.4 5.4 0 0 0-1.22-.7L9.24.99A.38.38 0 0 0 8.87.7H7.13a.38.38 0 0 0-.37.29l-.27 1.96c-.44.18-.85.41-1.22.7l-1.79-.72a.38.38 0 0 0-.45.17L1.49 5.63a.38.38 0 0 0 .09.48L3.1 7.3c-.04.23-.06.47-.06.7s.02.47.06.7L1.58 9.89a.38.38 0 0 0-.09.48l1.54 2.66c.1.18.32.26.51.17l1.79-.72c.37.29.78.52 1.22.7l.27 1.96c.04.18.19.31.37.31h1.74c.18 0 .33-.13.37-.31l.27-1.96c.44-.18.85-.41 1.22-.7l1.79.72c.19.09.41.01.51-.17l1.54-2.66a.38.38 0 0 0-.09-.48L12.9 8.7zM8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6z'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: 16px 16px !important;
+}
+
+#bromine-settings-button .toolbarbutton-icon {
+  display: none !important;
+}
+
+#bromine-leading #PanelUI-menu-button .toolbarbutton-icon {
+  width: 16px !important;
+  height: 16px !important;
+  fill: #f3ebe4 !important;
+  -moz-context-properties: fill, fill-opacity !important;
+}
+
+#bromine-settings-button:hover,
+#bromine-leading #PanelUI-menu-button:hover {
+  background-color: color-mix(in srgb, var(--bromine-fg) 12%, transparent) !important;
+}
+
+#TabsToolbar .toolbarbutton-1:hover,
+#nav-bar .toolbarbutton-1:hover {
+  background: color-mix(in srgb, var(--bromine-fg) 10%, transparent) !important;
+}
+
+/* Hide nav clutter + dead strip leftovers.
+ * CRITICAL: hide #stop-reload-button / #stop-button too — we used to only
+ * hide #reload-button, so during load Firefox reveals stop and it briefly
+ * paints left of the URL bar (tiny glyph) and shoves the bar right. */
+#nav-bar #library-button,
+#nav-bar #downloads-button,
+#nav-bar #fxa-toolbar-menu-button,
+#nav-bar #unified-extensions-button,
+#nav-bar #nav-bar-overflow-button,
+#nav-bar #back-button,
+#nav-bar #forward-button,
+#nav-bar #reload-button,
+#nav-bar #stop-button,
+#nav-bar #stop-reload-button,
+#nav-bar #home-button,
+#nav-bar #sidebar-button,
+#nav-bar #vertical-spacer,
+#nav-bar #customizableui-special-spring1,
+#nav-bar #customizableui-special-spring2,
+#nav-bar toolbarspring,
+#nav-bar #reset-pbm-toolbar-button,
+#TabsToolbar #alltabs-button,
+#TabsToolbar #sidebar-button,
+#TabsToolbar #reload-button,
+#TabsToolbar #home-button,
+#TabsToolbar #back-button,
+#TabsToolbar #forward-button,
+#TabsToolbar #ai-window-toggle,
+#TabsToolbar #new-tab-button,
+#bromine-back-button,
+#bromine-forward-button,
+#bromine-appmenu-button {
+  display: none !important;
+  visibility: collapse !important;
+  width: 0 !important;
+  min-width: 0 !important;
+  max-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  flex: 0 0 0 !important;
+}
+
+/* Right cluster — utilities only (+ hugs tabs) */
+#bromine-trailing #unified-extensions-button,
+#bromine-trailing #downloads-button,
+#bromine-trailing #library-button,
+#bromine-trailing #history-panelmenu,
+#bromine-trailing #alltabs-button {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 28px !important;
+  min-width: 28px !important;
+  max-width: none !important;
+  margin-inline: 2px !important;
+  padding: 0 !important;
+  flex: 0 0 auto !important;
+  color: var(--bromine-chrome-ink-soft, var(--toolbarbutton-icon-fill, #f3ebe4)) !important;
+  fill: currentColor !important;
+  -moz-context-properties: fill, fill-opacity !important;
+}
+
+#bromine-trailing #unified-extensions-button {
+  list-style-image: url("chrome://mozapps/skin/extensions/extension.svg") !important;
+  overflow: visible !important;
+  padding-block: 2px !important;
+}
+
+#bromine-trailing #unified-extensions-button .toolbarbutton-icon,
+#bromine-trailing #unified-extensions-button .toolbarbutton-badge-stack {
+  overflow: visible !important;
+}
+
+#bromine-trailing #unified-extensions-button[attention] > .toolbarbutton-icon,
+#bromine-trailing #unified-extensions-button[attention] > .toolbarbutton-badge-stack {
+  background-position: center bottom 1px !important;
+  background-size: 6px 6px !important;
+}
+
+#bromine-trailing #downloads-button {
+  list-style-image: url("chrome://browser/skin/downloads/downloads.svg") !important;
+}
+
+#bromine-trailing #library-button {
+  list-style-image: url("chrome://browser/skin/library.svg") !important;
+}
+
+#bromine-trailing #alltabs-button {
+  list-style-image: url("chrome://global/skin/icons/arrow-down.svg") !important;
+}
+
+#bromine-trailing .toolbarbutton-icon {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 16px !important;
+  height: 16px !important;
+  fill: currentColor !important;
+  -moz-context-properties: fill, fill-opacity !important;
+}
+
+:root[bromine-unified-chrome="true"] #nav-bar #PanelUI-button,
+:root[bromine-unified-chrome="true"] #nav-bar #PanelUI-menu-button {
+  display: none !important;
+}
+
+:root[bromine-unified-chrome="true"] #bromine-leading #PanelUI-button,
+:root[bromine-unified-chrome="true"] #bromine-leading #PanelUI-menu-button {
+  display: flex !important;
+}
+
+#bromine-trailing {
+  display: flex !important;
+  align-items: center !important;
+  flex: 0 0 auto !important;
+  margin-inline-start: auto !important;
+  margin-inline-end: 4px !important;
+  overflow: visible !important;
+  -moz-window-dragging: no-drag !important;
+}
+
+/* Native + hidden — Bromine + hugs last tab */
+#new-tab-button,
+#tabs-newtab-button {
+  display: none !important;
+}
+
+#tabbrowser-arrowscrollbox-periphery {
+  display: flex !important;
+  width: 0 !important;
+  min-width: 0 !important;
+  max-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+}
+
+#bromine-newtab-button {
+  appearance: none !important;
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  flex: 0 0 auto !important;
+  align-self: center !important;
+  align-items: center !important;
+  justify-content: center !important;
+  -moz-box-align: center !important;
+  -moz-box-pack: center !important;
+  box-sizing: border-box !important;
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  min-height: 28px !important;
+  max-height: 28px !important;
+  margin-block: auto !important;
+  margin-inline-start: 2px !important;
+  margin-inline-end: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  border-radius: 6px !important;
+  color: #f3ebe4 !important;
+  fill: #f3ebe4 !important;
+  -moz-context-properties: fill, fill-opacity !important;
+  list-style-image: none !important;
+  background-color: transparent !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23f3ebe4'%3E%3Cpath d='M8 3a.75.75 0 0 1 .75.75v3.5h3.5a.75.75 0 0 1 0 1.5h-3.5v3.5a.75.75 0 0 1-1.5 0v-3.5h-3.5a.75.75 0 0 1 0-1.5h3.5v-3.5A.75.75 0 0 1 8 3z'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: center center !important;
+  background-size: 16px 16px !important;
+  -moz-window-dragging: no-drag !important;
+  pointer-events: auto !important;
+  z-index: 10 !important;
+  position: relative !important;
+  top: 0 !important;
+}
+
+#bromine-newtab-button .toolbarbutton-icon,
+#bromine-newtab-button .toolbarbutton-badge-stack,
+#bromine-newtab-button .toolbarbutton-text {
+  display: none !important;
+}
+
+#bromine-newtab-button:hover {
+  background-color: color-mix(in srgb, var(--bromine-fg) 12%, transparent) !important;
+}
+
+/* URL bar — fixed basis so tab-strip hug resize cannot shove it around */
+#urlbar-container {
+  order: -1 !important;
+  width: 220px !important;
+  max-width: 220px !important;
+  min-width: 220px !important;
+  flex: 0 0 220px !important;
+  margin-inline: 10px 8px !important;
+  padding: 0 !important;
+  transition: none !important;
+  transform: none !important;
+  -moz-window-dragging: no-drag;
+  overflow: visible !important;
+}
+
+#urlbar {
+  min-height: 28px !important;
+  font-size: 12px !important;
+  overflow: visible !important;
+}
+
+/* Height lock only when closed — max-height clipped the results panel
+ * background so suggestions floated over page content with no box. */
+#urlbar:not([open]):not([breakout-extend]) {
+  max-height: 28px !important;
+}
+
+#urlbar[open],
+#urlbar[breakout-extend] {
+  max-height: none !important;
+  height: auto !important;
+  z-index: 5 !important;
+}
+
+#urlbar-background {
+  background: color-mix(in srgb, var(--bromine-fg) 6%, var(--bromine-chrome-strip)) !important;
+  border: 1px solid color-mix(in srgb, var(--bromine-fg) 12%, transparent) !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+}
+
+#urlbar[focused]:not([open]):not([breakout-extend]) > #urlbar-background,
+#urlbar:hover:not([open]):not([breakout-extend]) > #urlbar-background {
+  background: color-mix(in srgb, var(--bromine-fg) 10%, var(--bromine-chrome-strip)) !important;
+  border-color: color-mix(in srgb, var(--bromine-accent) 45%, transparent) !important;
+  box-shadow: none !important;
+}
+
+/* Search / autocomplete panel — explicit per-theme colors (not only vars),
+ * so the dropdown always tracks bromine-theme even if inheritance fails. */
+#urlbar[open] > #urlbar-background,
+#urlbar[breakout-extend] > #urlbar-background {
+  background: var(--bromine-urlbar-panel) !important;
+  background-color: var(--bromine-urlbar-panel) !important;
+  border: 1px solid var(--bromine-border) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 10px 28px color-mix(in srgb, #000 55%, transparent) !important;
+}
+
+:root[bromine-theme="bromine"] #urlbar[open] > #urlbar-background,
+:root[bromine-theme="bromine"] #urlbar[breakout-extend] > #urlbar-background {
+  background: #2a1f18 !important;
+  background-color: #2a1f18 !important;
+  border-color: #4a382c !important;
+}
+
+:root[bromine-theme="midnight"] #urlbar[open] > #urlbar-background,
+:root[bromine-theme="midnight"] #urlbar[breakout-extend] > #urlbar-background {
+  background: #141210 !important;
+  background-color: #141210 !important;
+  border-color: #2a2420 !important;
+}
+
+.urlbarView,
+#urlbar .urlbarView,
+.urlbarView-body-outer,
+.urlbarView-body-inner,
+.urlbarView-results {
+  background: transparent !important;
+  color: var(--bromine-popup-fg, var(--bromine-fg)) !important;
+}
+
+.urlbarView-row {
+  color: var(--bromine-popup-fg, var(--bromine-fg)) !important;
+  border-radius: 6px !important;
+}
+
+.urlbarView-row[selected],
+.urlbarView-row[current],
+.urlbarView-row:hover {
+  background: var(--bromine-urlbar-panel-row) !important;
+  color: var(--bromine-fg) !important;
+}
+
+:root[bromine-theme="bromine"] .urlbarView-row[selected],
+:root[bromine-theme="bromine"] .urlbarView-row[current],
+:root[bromine-theme="bromine"] .urlbarView-row:hover {
+  background: #3a2c22 !important;
+}
+
+:root[bromine-theme="midnight"] .urlbarView-row[selected],
+:root[bromine-theme="midnight"] .urlbarView-row[current],
+:root[bromine-theme="midnight"] .urlbarView-row:hover {
+  background: #1e1a17 !important;
+}
+
+.urlbarView-title,
+.urlbarView-url,
+.urlbarView-action,
+.urlbarView-title-separator {
+  color: inherit !important;
+}
+
+.urlbarView-url {
+  color: var(--bromine-fg-muted) !important;
+}
+
+.urlbarView-row[selected] > .urlbarView-row-inner .urlbarView-url,
+.urlbarView-row:hover > .urlbarView-row-inner .urlbarView-url {
+  color: var(--bromine-accent) !important;
+}
+
+:root[bromine-theme="bromine"] .urlbarView-row[selected] .urlbarView-url,
+:root[bromine-theme="bromine"] .urlbarView-row:hover .urlbarView-url {
+  color: #e85d04 !important;
+}
+
+:root[bromine-theme="midnight"] .urlbarView-row[selected] .urlbarView-url,
+:root[bromine-theme="midnight"] .urlbarView-row:hover .urlbarView-url {
+  color: #c44d0a !important;
+}
+
+#urlbar-input,
+#urlbar-input::placeholder {
+  font-size: 12px !important;
+  color: var(--bromine-chrome-ink-soft) !important;
+}
+
+#urlbar[focused] #urlbar-input {
+  color: var(--bromine-chrome-label-active) !important;
+}
+
+#identity-box,
+#trust-icon-container,
+#remote-control-box,
+#tracking-protection-icon-container,
+#notification-popup-box,
+#page-action-buttons > :not(#star-button-box),
+#urlbar-go-button,
+#urlbar-search-mode-indicator,
+#urlbar .urlbar-page-action:not(#star-button-box) {
+  display: none !important;
+}
+
+#star-button-box,
+#star-button {
+  display: flex !important;
+  fill: var(--bromine-chrome-ink-soft) !important;
+  -moz-context-properties: fill !important;
+}
+
+/* Window controls — far right */
+.titlebar-buttonbox-container {
+  margin-inline-start: auto !important;
+  padding-inline: 8px 16px !important;
+}
+
+.titlebar-button {
+  width: 36px !important;
+  height: var(--bromine-strip-height) !important;
+  color: var(--bromine-chrome-ink-soft) !important;
+  stroke: var(--bromine-chrome-ink-soft) !important;
+  appearance: none !important;
+}
+
+.titlebar-button:hover {
+  background: color-mix(in srgb, var(--bromine-fg) 10%, transparent) !important;
+}
+
+.titlebar-close:hover {
+  background: color-mix(in srgb, #e81123 85%, #000) !important;
+  color: #fff !important;
+}
+
+/* —— Page content fills under the strip (no outer gap) ——
+ * Solid dark fill on panels so new tabs never flash grey/white
+ * before bromine-start paints.
+ */
+#browser {
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 0 0 calc(var(--bromine-window-radius) - 1px) calc(var(--bromine-window-radius) - 1px) !important;
+  background: var(--bromine-canvas) !important;
+  background-image: none !important;
+  overflow: clip !important;
+}
+
+#appcontent,
+.browserStack,
+#tabbrowser-tabpanels,
+#tabbrowser-tabbox,
+.browserContainer,
+browser {
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 0 0 calc(var(--bromine-window-radius) - 1px) calc(var(--bromine-window-radius) - 1px) !important;
+  box-shadow: none !important;
+  overflow: clip !important;
+  background: var(--bromine-canvas) !important;
+  background-color: var(--bromine-canvas) !important;
+  background-image: none !important;
+}
+
+/* Ensure unloaded / about:blank browsers stay dark */
+.browserStack > browser,
+#tabbrowser-tabpanels browser {
+  background: var(--bromine-canvas) !important;
+  background-color: var(--bromine-canvas) !important;
+}
+
+#main-window[sizemode="maximized"] #navigator-toolbox,
+#main-window[sizemode="fullscreen"] #navigator-toolbox {
+  border-radius: 0 !important;
+  border: none !important;
+}
+
+#main-window[sizemode="maximized"] #browser,
+#main-window[sizemode="fullscreen"] #browser,
+#main-window[sizemode="maximized"] #tabbrowser-tabbox,
+#main-window[sizemode="fullscreen"] #tabbrowser-tabbox,
+#main-window[sizemode="maximized"] #appcontent,
+#main-window[sizemode="fullscreen"] #appcontent,
+#main-window[sizemode="maximized"] .browserStack,
+#main-window[sizemode="fullscreen"] .browserStack,
+#main-window[sizemode="maximized"] #tabbrowser-tabpanels,
+#main-window[sizemode="fullscreen"] #tabbrowser-tabpanels {
+  border-radius: 0 !important;
+  border: none !important;
+}
+
+/* Resize: keep strip cheap to paint */
+:root[bromine-resizing="true"] #navigator-toolbox,
+:root[bromine-resizing="true"] #browser {
+  background-image: none !important;
+}
+
+:root[bromine-resizing="true"] #TabsToolbar,
+:root[bromine-resizing="true"] #nav-bar,
+:root[bromine-resizing="true"] .tab-background {
+  transition: none !important;
+  box-shadow: none !important;
+}
+
+:root[bromine-resizing="true"] * {
+  backdrop-filter: none !important;
+  animation: none !important;
+}
+
+:root[bromine-chrome="ultralight"] {
+  --bromine-strip-height: 36px;
+  --bromine-window-radius: 10px;
+}
+
+:root[bromine-chrome="full"] {
+  --bromine-strip-height: 44px;
+  --bromine-window-radius: 14px;
+}
+
+:root[bromine-density="touch"] {
+  --bromine-strip-height: 44px;
+}
+
+/* —— Ctrl-drag: float chrome like a window (no menu) —— */
+:root.bromine-ctrl-arrange #urlbar-container,
+:root.bromine-ctrl-arrange #bromine-leading {
+  cursor: grab !important;
+}
+
+:root.bromine-arrange-active,
+:root.bromine-arrange-active * {
+  cursor: grabbing !important;
+  user-select: none !important;
+}
+
+.bromine-arrange-dragging {
+  opacity: 0.35 !important;
+}
+
+.bromine-arrange-ghost {
+  position: fixed !important;
+  left: 0 !important;
+  top: 0 !important;
+  z-index: 2147483646 !important;
+  pointer-events: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+  padding: 0 12px !important;
+  border-radius: 8px !important;
+  border: 1px solid color-mix(in srgb, var(--bromine-accent, #c4784a) 55%, transparent) !important;
+  background: var(--bromine-chrome-strip, #1c1815) !important;
+  color: var(--bromine-chrome-ink, #f3ebe4) !important;
+  font: 12px/1 system-ui, sans-serif !important;
+  box-shadow: none !important;
+}
+
+#TabsToolbar.bromine-drop-hot,
+#nav-bar.bromine-drop-hot {
+  outline: 1px solid color-mix(in srgb, var(--bromine-accent, #c4784a) 70%, transparent) !important;
+  outline-offset: -2px !important;
+  background: color-mix(in srgb, var(--bromine-accent, #c4784a) 10%, transparent) !important;
+  box-shadow: none !important;
+  filter: none !important;
+}

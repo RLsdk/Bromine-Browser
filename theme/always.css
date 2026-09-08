@@ -1,0 +1,356 @@
+/* Bromine layout — ALWAYS registered (every Firefox theme).
+ * Keeps tab hug + custom new-tab button working when colour chrome is off.
+ * See .cursor/rules/tabs-must-stay-visible.mdc
+ */
+
+:root {
+  --bromine-strip-height: 40px;
+  --bromine-tab-min: 76px;
+  --bromine-tab-width: 150px;
+}
+
+/* Keep tabs content-sized so + hugs the last tab (not far right). */
+#tabbrowser-tabs {
+  visibility: visible !important;
+  opacity: 1 !important;
+  flex: 0 0 auto !important;
+  flex-grow: 0 !important;
+  flex-shrink: 0 !important;
+  min-width: 160px !important; /* NEVER 0 */
+  max-width: calc(100% - 160px) !important;
+  overflow: visible !important;
+  margin-inline-start: 0 !important;
+  padding-inline-start: 0 !important;
+  --tab-overflow-clip-margin: 0px !important;
+}
+
+:root[bromine-chrome-strip="classic"] #tabbrowser-tabs {
+  flex: 0 0 auto !important;
+  flex-grow: 0 !important;
+  flex-shrink: 0 !important;
+  min-width: 160px !important;
+}
+
+#TabsToolbar {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  flex: 1 1 auto !important;
+  min-height: var(--bromine-strip-height) !important;
+}
+
+/* Overflow arrows — IDs and ::part */
+#scrollbutton-up,
+#scrollbutton-down,
+#tabbrowser-arrowscrollbox > #scrollbutton-up,
+#tabbrowser-arrowscrollbox > #scrollbutton-down,
+#tabbrowser-tabs #scrollbutton-up,
+#tabbrowser-tabs #scrollbutton-down {
+  display: none !important;
+  visibility: collapse !important;
+  width: 0 !important;
+  min-width: 0 !important;
+  max-width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  pointer-events: none !important;
+}
+
+#tabbrowser-arrowscrollbox::part(scrollbutton-up),
+#tabbrowser-arrowscrollbox::part(scrollbutton-down),
+#tabbrowser-tabs > arrowscrollbox::part(scrollbutton-up),
+#tabbrowser-tabs > arrowscrollbox::part(scrollbutton-down) {
+  display: none !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  min-width: 0 !important;
+  max-width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Left "dot" overflow indicators */
+#tabbrowser-arrowscrollbox::part(overflow-start-indicator),
+#tabbrowser-arrowscrollbox::part(overflow-end-indicator),
+#tabbrowser-tabs > arrowscrollbox::part(overflow-start-indicator),
+#tabbrowser-tabs > arrowscrollbox::part(overflow-end-indicator),
+#pinned-tabs-container::part(overflow-start-indicator),
+#pinned-tabs-container::part(overflow-end-indicator) {
+  display: none !important;
+  visibility: collapse !important;
+  width: 0 !important;
+  min-width: 0 !important;
+  max-width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  opacity: 0 !important;
+  background: none !important;
+  background-image: none !important;
+  border: none !important;
+  pointer-events: none !important;
+  transition: none !important;
+}
+
+#tabbrowser-tabs[overflow],
+#tabbrowser-arrowscrollbox[overflowing] {
+  padding-inline-start: 0 !important;
+  margin-inline-start: 0 !important;
+}
+
+#tabbrowser-arrowscrollbox,
+#tabbrowser-tabs > arrowscrollbox {
+  visibility: visible !important;
+  min-width: 140px !important; /* NEVER 0 */
+  flex: 0 0 auto !important;
+  max-width: none !important;
+  margin-inline-start: 0 !important;
+  padding-inline-start: 0 !important;
+  scroll-padding-inline-start: 0 !important;
+  overflow-clip-margin: 0 !important;
+}
+
+#tabbrowser-arrowscrollbox::part(scrollbox),
+#tabbrowser-tabs > arrowscrollbox::part(scrollbox) {
+  padding-inline-start: 0 !important;
+  margin-inline-start: 0 !important;
+  scroll-padding-inline-start: 0 !important;
+}
+
+#tabbrowser-arrowscrollbox .scrollbox-clip,
+#tabbrowser-arrowscrollbox scrollbox,
+#tabbrowser-tabs scrollbox {
+  margin-inline-start: 0 !important;
+  padding-inline-start: 0 !important;
+}
+
+.tabbrowser-tab {
+  visibility: visible !important;
+  opacity: 1 !important;
+  flex: 0 0 auto !important;
+  min-width: var(--bromine-tab-min, 76px) !important;
+  width: var(--bromine-tab-width, 150px) !important;
+  max-width: var(--bromine-tab-width, 150px) !important;
+  transition: none !important;
+}
+
+#tabbrowser-tabs .tabbrowser-tab,
+#tabbrowser-tabs[orient="horizontal"] .tabbrowser-tab:not([pinned]) {
+  margin-inline: 3px !important;
+  min-width: var(--bromine-tab-min, 76px) !important;
+  width: var(--bromine-tab-width, 150px) !important;
+  max-width: var(--bromine-tab-width, 150px) !important;
+  flex: 0 0 auto !important;
+  transition: none !important;
+}
+
+#tabbrowser-tabs[orient="horizontal"] .tabbrowser-tab:not([pinned])[fadein] {
+  min-width: var(--bromine-tab-min, 76px) !important;
+}
+
+#tabbrowser-tabs[orient="horizontal"] .tabbrowser-tab:not([pinned]):not([fadein]) {
+  min-width: 0.1px !important;
+  width: 0.1px !important;
+  max-width: 0.1px !important;
+  flex: 0 0 auto !important;
+  transition: none !important;
+}
+
+.tabbrowser-tab[pinned] {
+  min-width: 36px !important;
+  width: 36px !important;
+  max-width: 36px !important;
+  flex: 0 0 auto !important;
+}
+
+.tabbrowser-tab[first-visible-tab],
+.tabbrowser-tab:first-of-type {
+  margin-inline-start: 0 !important;
+}
+
+/* Far-right utilities (extensions / downloads / …). + hugs tabs separately. */
+#bromine-trailing {
+  display: flex !important;
+  align-items: center !important;
+  flex: 0 0 auto !important;
+  flex-shrink: 0 !important;
+  gap: 2px !important;
+  margin-inline-start: auto !important;
+  margin-inline-end: 4px !important;
+  padding-inline: 4px 0 !important;
+  overflow: visible !important;
+  -moz-window-dragging: no-drag !important;
+}
+
+.titlebar-buttonbox-container,
+#TabsToolbar .titlebar-buttonbox-container {
+  flex-shrink: 0 !important;
+  margin-inline-start: 0 !important;
+}
+
+#TabsToolbar .titlebar-spacer[type="post-tabs"] {
+  display: none !important;
+}
+
+/* Native + hidden — Bromine + hugs last tab */
+#new-tab-button,
+#tabs-newtab-button {
+  display: none !important;
+}
+
+#tabbrowser-arrowscrollbox-periphery {
+  display: flex !important;
+  width: 0 !important;
+  min-width: 0 !important;
+  max-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+}
+
+#bromine-newtab-button {
+  appearance: none !important;
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  flex: 0 0 auto !important;
+  align-self: center !important;
+  align-items: center !important;
+  justify-content: center !important;
+  -moz-box-align: center !important;
+  -moz-box-pack: center !important;
+  box-sizing: border-box !important;
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  min-height: 28px !important;
+  max-height: 28px !important;
+  margin-block: auto !important;
+  margin-inline-start: 2px !important;
+  margin-inline-end: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  border-radius: 6px !important;
+  color: var(--toolbarbutton-icon-fill, var(--lwt-tab-text, CanvasText)) !important;
+  fill: currentColor !important;
+  -moz-context-properties: fill, fill-opacity !important;
+  list-style-image: url("chrome://global/skin/icons/plus.svg") !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  -moz-window-dragging: no-drag !important;
+  pointer-events: auto !important;
+  z-index: 10 !important;
+  position: relative !important;
+  top: 0 !important;
+}
+
+#bromine-newtab-button .toolbarbutton-icon {
+  display: flex !important;
+  width: 16px !important;
+  height: 16px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+#bromine-newtab-button .toolbarbutton-badge-stack,
+#bromine-newtab-button .toolbarbutton-text {
+  display: none !important;
+}
+
+#bromine-newtab-button:hover {
+  background-color: color-mix(in srgb, currentColor 12%, transparent) !important;
+}
+
+/* Trailing utility buttons — keep real toolbar icons (fill + list-style-image) */
+#bromine-trailing > toolbarbutton,
+#bromine-trailing > toolbaritem > toolbarbutton,
+#bromine-trailing #unified-extensions-button,
+#bromine-trailing #downloads-button,
+#bromine-trailing #library-button,
+#bromine-trailing #history-panelmenu,
+#bromine-trailing #alltabs-button {
+  appearance: none !important;
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  flex: 0 0 auto !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  max-width: none !important;
+  margin-inline: 2px !important;
+  padding: 0 !important;
+  border-radius: 6px !important;
+  color: var(--toolbarbutton-icon-fill, var(--lwt-tab-text, CanvasText)) !important;
+  fill: currentColor !important;
+  -moz-context-properties: fill, fill-opacity !important;
+  -moz-window-dragging: no-drag !important;
+  background-color: transparent !important;
+}
+
+#bromine-trailing #unified-extensions-button {
+  list-style-image: url("chrome://mozapps/skin/extensions/extension.svg") !important;
+  /* Room for the attention dot under the glyph — was clipping (“blipped”) */
+  overflow: visible !important;
+  padding-block: 2px !important;
+  box-sizing: border-box !important;
+}
+
+#bromine-trailing #unified-extensions-button .toolbarbutton-icon,
+#bromine-trailing #unified-extensions-button .toolbarbutton-badge-stack {
+  overflow: visible !important;
+  background-clip: padding-box !important;
+}
+
+/* Keep Firefox’s attention dot inside our 28px control */
+#bromine-trailing #unified-extensions-button[attention] > .toolbarbutton-icon,
+#bromine-trailing #unified-extensions-button[attention] > .toolbarbutton-badge-stack {
+  background-position: center bottom 1px !important;
+  background-size: 6px 6px !important;
+}
+
+#bromine-trailing #downloads-button {
+  list-style-image: url("chrome://browser/skin/downloads/downloads.svg") !important;
+}
+
+#bromine-trailing #library-button {
+  list-style-image: url("chrome://browser/skin/library.svg") !important;
+}
+
+#bromine-trailing #alltabs-button {
+  list-style-image: url("chrome://global/skin/icons/arrow-down.svg") !important;
+}
+
+#bromine-trailing .toolbarbutton-icon,
+#bromine-trailing #unified-extensions-button .toolbarbutton-icon,
+#bromine-trailing #downloads-button .toolbarbutton-icon,
+#bromine-trailing #library-button .toolbarbutton-icon,
+#bromine-trailing #alltabs-button .toolbarbutton-icon {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 16px !important;
+  height: 16px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style-image: inherit !important;
+  -moz-context-properties: fill, fill-opacity !important;
+  fill: currentColor !important;
+}
+
+#bromine-trailing .toolbarbutton-1:hover {
+  background-color: color-mix(in srgb, currentColor 12%, transparent) !important;
+}
+
+:root[bromine-hide-single-tab="true"] #tabbrowser-tabs:not([overflow]) .tabbrowser-tab:only-of-type {
+  visibility: hidden !important;
+  max-width: 0 !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}

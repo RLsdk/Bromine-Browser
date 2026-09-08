@@ -1,0 +1,26 @@
+/* Density: compact (default) / normal / touch */
+:root[bromine-density="compact"] {
+  --tab-min-height: 28px !important;
+  --bromine-chrome-pad: 1px;
+  --bromine-toolbar-height: 40px;
+  --bromine-strip-height: 40px;
+}
+
+:root[bromine-density="normal"] {
+  --tab-min-height: 34px !important;
+  --bromine-chrome-pad: 3px;
+}
+
+:root[bromine-density="touch"] {
+  --tab-min-height: 40px !important;
+  --bromine-chrome-pad: 4px;
+}
+
+:root[bromine-density="compact"] toolbar .toolbarbutton-1 {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+:root[bromine-density="compact"] #TabsToolbar {
+  padding-inline: 0 !important;
+}

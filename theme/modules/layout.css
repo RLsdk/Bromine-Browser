@@ -1,0 +1,168 @@
+/* Programmable / draggable layout — paint-cheap edit chrome
+ * No infinite animations, blur, filters, or heavy shadows on the hot path.
+ */
+
+:root {
+  --bromine-layout-zone: color-mix(in srgb, var(--bromine-accent) 55%, transparent);
+}
+
+/* Bottom-docked modules */
+toolbar[bromine-dock="bottom"],
+#TabsToolbar[bromine-dock="bottom"],
+#nav-bar[bromine-dock="bottom"],
+#PersonalToolbar[bromine-dock="bottom"] {
+  order: 20 !important;
+  width: auto !important;
+  margin: 0 var(--bromine-module-gap, 8px) var(--bromine-module-gap, 8px) !important;
+  border-radius: var(--bromine-module-radius, 12px) !important;
+  border: 1px solid var(--bromine-module-border) !important;
+  background: var(--bromine-module-bg) !important;
+  box-shadow: none !important;
+}
+
+#PersonalToolbar[bromine-dock="hidden"],
+#nav-bar[bromine-dock="hidden"] {
+  visibility: collapse !important;
+}
+
+:root[bromine-tabs-edge="left"] #TabsToolbar,
+:root[bromine-tabs-edge="right"] #TabsToolbar {
+  visibility: collapse !important;
+}
+
+/* Edit mode — static outline only (no pulse / glow animation) */
+:root[bromine-layout-edit="true"] toolbar[bromine-draggable],
+:root[bromine-layout-edit="true"] #bromine-rail[bromine-draggable] {
+  outline: 2px solid color-mix(in srgb, var(--bromine-accent) 65%, transparent) !important;
+  outline-offset: -2px !important;
+  box-shadow: none !important;
+  animation: none !important;
+}
+
+.bromine-layout-grip {
+  display: none;
+  align-self: center;
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  margin-inline: 6px 4px;
+  border-radius: 8px;
+  place-items: center;
+  font: 700 13px/1 sans-serif;
+  letter-spacing: 0.02em;
+  color: var(--bromine-accent-fg, #12100e);
+  background: var(--bromine-accent);
+  border: 1px solid color-mix(in srgb, #fff 14%, transparent);
+  box-shadow: none;
+  cursor: grab;
+  user-select: none;
+  -moz-user-select: none;
+  z-index: 100;
+}
+
+:root[bromine-layout-edit="true"] .bromine-layout-grip {
+  display: grid;
+}
+
+.bromine-layout-grip:hover {
+  background: var(--bromine-accent-hot, var(--bromine-accent));
+}
+
+.bromine-layout-grip:active {
+  cursor: grabbing;
+}
+
+.bromine-layout-dragging {
+  opacity: 0.55 !important;
+}
+
+.bromine-layout-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  pointer-events: none;
+  display: grid;
+  grid-template-columns: 96px 1fr 96px;
+  grid-template-rows: 80px 1fr 80px;
+  gap: 10px;
+  padding: 12px;
+  box-sizing: border-box;
+  background: color-mix(in srgb, #000 40%, transparent);
+  backdrop-filter: none;
+}
+
+.bromine-layout-zone {
+  pointer-events: auto;
+  display: grid;
+  place-items: center;
+  border-radius: var(--bromine-module-radius, 12px);
+  border: 2px dashed color-mix(in srgb, var(--bromine-accent) 75%, #fff);
+  background: color-mix(in srgb, var(--bromine-module-bg) 88%, transparent);
+  color: var(--bromine-fg);
+  font: 700 11px/1 system-ui, sans-serif;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  box-shadow: none;
+}
+
+.bromine-layout-zone-top {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.bromine-layout-zone-bottom {
+  grid-column: 2;
+  grid-row: 3;
+}
+
+.bromine-layout-zone-left {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.bromine-layout-zone-right {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+.bromine-layout-zone-hidden {
+  grid-column: 2;
+  grid-row: 2;
+  align-self: center;
+  justify-self: center;
+  width: min(220px, 42%);
+  height: 72px;
+  opacity: 0.9;
+  border-style: solid;
+  border-color: color-mix(in srgb, var(--bromine-fg-muted) 50%, transparent);
+}
+
+.bromine-layout-zone-hot {
+  background: color-mix(in srgb, var(--bromine-accent) 28%, var(--bromine-module-bg));
+  border-color: var(--bromine-accent);
+  border-style: solid;
+}
+
+.bromine-layout-hint {
+  pointer-events: none;
+  position: fixed;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: var(--bromine-module-bg);
+  border: 1px solid var(--bromine-module-border);
+  color: var(--bromine-fg);
+  font: 600 12px/1.2 system-ui, sans-serif;
+  letter-spacing: 0.02em;
+  z-index: 100000;
+  box-shadow: none;
+}
+
+:root.bromine-layout-dragging-root .bromine-layout-overlay {
+  pointer-events: none;
+}
+:root.bromine-layout-dragging-root .bromine-layout-zone {
+  pointer-events: auto;
+}

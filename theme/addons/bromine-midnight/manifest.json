@@ -1,0 +1,48 @@
+{
+  "manifest_version": 2,
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "bromine-midnight@bromine"
+    }
+  },
+  "name": "Bromine Midnight",
+  "description": "Near-black Bromine chrome with muted ember accents.",
+  "author": "Bromine",
+  "version": "1.1.0",
+  "icons": { "32": "icon.svg" },
+  "theme": {
+    "colors": {
+      "frame": "#12100e",
+      "tab_background_text": "#e8e0d8",
+      "toolbar": "#12100e",
+      "toolbar_text": "#e8e0d8",
+      "toolbar_field": "#0c0a09",
+      "toolbar_field_text": "#e8e0d8",
+      "toolbar_field_border": "#2a2420",
+      "toolbar_field_focus": "#141210",
+      "toolbar_field_text_focus": "#e8e0d8",
+      "toolbar_field_border_focus": "#c44d0a",
+      "toolbar_field_highlight": "#c44d0a",
+      "toolbar_field_highlight_text": "#0a0908",
+      "tab_line": "#c44d0a",
+      "tab_selected": "#1e1a17",
+      "popup": "#141210",
+      "popup_text": "#e8e0d8",
+      "popup_border": "#2a2420",
+      "popup_highlight": "#1e1a17",
+      "popup_highlight_text": "#e8e0d8",
+      "sidebar": "#0a0908",
+      "sidebar_text": "#e8e0d8",
+      "sidebar_border": "#2a2420",
+      "ntp_background": "#0a0908",
+      "ntp_text": "#e8e0d8",
+      "icons": "#8a7e74",
+      "icons_attention": "#c44d0a",
+      "button_background_hover": "#1e1a17",
+      "button_background_active": "#2a2420"
+    },
+    "properties": {
+      "color_scheme": "dark"
+    }
+  }
+}

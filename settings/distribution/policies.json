@@ -1,0 +1,106 @@
+{
+  "__COMMENT__ More Information": "https://github.com/mozilla/policy-templates/blob/master/README.md",
+  "policies": {
+    "AIControls": {
+      "Translations": { "Value": "available" },
+      "PDFAltText": { "Value": "blocked" },
+      "SmartTabGroups": { "Value": "blocked" },
+      "LinkPreviewKeyPoints": { "Value": "blocked" },
+      "SidebarChatbot": { "Value": "blocked" },
+      "SmartWindow": { "Value": "blocked" }
+    },
+    "AppUpdateURL": "https://localhost",
+    "DisableAppUpdate": true,
+    "DisableDefaultBrowserAgent": true,
+    "DisableFeedbackCommands": true,
+    "DisableFirefoxStudies": true,
+    "DisableRemoteImprovements": true,
+    "DisableSetDesktopBackground": false,
+    "DisableTelemetry": true,
+    "DontCheckDefaultBrowser": true,
+    "WebsiteFilter": {
+      "Block": ["https://localhost/*"],
+      "Exceptions": ["https://localhost/*"]
+    },
+    "EncryptedMediaExtensions": {
+      "Enabled": false
+    },
+    "3rdparty": {
+      "Extensions": {
+        "uBlock0@raymondhill.net": {
+          "adminSettings": {
+            "selectedFilterLists": [
+              "user-filters",
+              "ublock-filters",
+              "ublock-badware",
+              "ublock-privacy",
+              "ublock-quick-fixes",
+              "ublock-unbreak",
+              "easylist",
+              "easyprivacy",
+              "urlhaus-1",
+              "plowe-0",
+              "fanboy-cookiemonster",
+              "ublock-cookies-easylist",
+              "adguard-cookies",
+              "ublock-cookies-adguard",
+              "easylist-annoyances",
+              "ublock-annoyances"
+            ]
+          }
+        }
+      }
+    },
+    "ExtensionSettings": {
+      "*": {
+        "blocked_install_message": "Bromine does not allow installing Language Packs from AMO.",
+        "installation_mode": "allowed",
+        "allowed_types": ["dictionary", "extension", "sitepermission", "theme"]
+      },
+      "uBlock0@raymondhill.net": {
+        "install_url": "https://addons.mozilla.org/firefox/downloads/latest/uBlock0@raymondhill.net/latest.xpi",
+        "installation_mode": "force_installed",
+        "private_browsing": true,
+        "default_area": "navbar"
+      },
+      "sponsorBlocker@ajay.app": {
+        "install_url": "https://addons.mozilla.org/firefox/downloads/latest/sponsorBlocker@ajay.app/latest.xpi",
+        "installation_mode": "normal_installed",
+        "private_browsing": false,
+        "default_area": "menupanel"
+      }
+    },
+    "FirefoxHome": {
+      "Weather": false,
+      "TopSites": false,
+      "SponsoredTopSites": false,
+      "Highlights": false,
+      "Stories": false,
+      "SponsoredStories": false
+    },
+    "FirefoxSuggest": {
+      "WebSuggestions": false,
+      "SponsoredSuggestions": false,
+      "ImproveSuggest": false
+    },
+    "HttpsOnlyMode": "enabled",
+    "LocalNetworkAccess": {
+      "Enabled": true,
+      "BlockTrackers": true,
+      "EnablePrompting": true
+    },
+    "NoDefaultBookmarks": true,
+    "OverridePostUpdatePage": "",
+    "SkipTermsOfUse": true,
+    "SupportMenu": {
+      "Title": "Bromine Issues",
+      "URL": "https://github.com"
+    },
+    "UserMessaging": {
+      "UrlbarInterventions": false,
+      "SkipOnboarding": true,
+      "MoreFromMozilla": false,
+      "FirefoxLabs": false
+    }
+  }
+}

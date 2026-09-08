@@ -1,0 +1,14 @@
+/* Bromine chrome — COLOUR + full modular UI (Bromine / Midnight LWT only).
+ * Layout that must survive other themes lives in always.css.
+ * Attribute-driven: bromine-theme (bromine | midnight), density, tabs, chrome
+ */
+
+@import url("chrome://browser/skin/bromine/tokens/bromine.css");
+@import url("chrome://browser/skin/bromine/modules/base.css");
+@import url("chrome://browser/skin/bromine/modules/shell.css");
+@import url("chrome://browser/skin/bromine/modules/compact.css");
+@import url("chrome://browser/skin/bromine/modules/tabs.css");
+@import url("chrome://browser/skin/bromine/modules/hide-clutter.css");
+@import url("chrome://browser/skin/bromine/modules/ultralight.css");
+@import url("chrome://browser/skin/bromine/modules/rail.css");
+@import url("chrome://browser/skin/bromine/modules/layout.css");

@@ -1,0 +1,57 @@
+{
+  "__COMMENT__": "Locked-down preset — only uBlock Origin. Copy over ../policies.json to use.",
+  "policies": {
+    "AIControls": {
+      "Translations": { "Value": "blocked" },
+      "PDFAltText": { "Value": "blocked" },
+      "SmartTabGroups": { "Value": "blocked" },
+      "LinkPreviewKeyPoints": { "Value": "blocked" },
+      "SidebarChatbot": { "Value": "blocked" },
+      "SmartWindow": { "Value": "blocked" }
+    },
+    "AppUpdateURL": "https://localhost",
+    "DisableAppUpdate": true,
+    "DisableDefaultBrowserAgent": true,
+    "DisableFeedbackCommands": true,
+    "DisableFirefoxStudies": true,
+    "DisableRemoteImprovements": true,
+    "DisableTelemetry": true,
+    "DontCheckDefaultBrowser": true,
+    "EncryptedMediaExtensions": { "Enabled": false },
+    "ExtensionSettings": {
+      "*": {
+        "blocked_install_message": "Bromine locked preset: only approved extensions.",
+        "installation_mode": "blocked",
+        "allowed_types": ["extension"]
+      },
+      "uBlock0@raymondhill.net": {
+        "install_url": "https://addons.mozilla.org/firefox/downloads/latest/uBlock0@raymondhill.net/latest.xpi",
+        "installation_mode": "force_installed",
+        "private_browsing": true,
+        "default_area": "navbar"
+      }
+    },
+    "FirefoxHome": {
+      "Weather": false,
+      "TopSites": false,
+      "SponsoredTopSites": false,
+      "Highlights": false,
+      "Stories": false,
+      "SponsoredStories": false
+    },
+    "FirefoxSuggest": {
+      "WebSuggestions": false,
+      "SponsoredSuggestions": false,
+      "ImproveSuggest": false
+    },
+    "HttpsOnlyMode": "enabled",
+    "NoDefaultBookmarks": true,
+    "SkipTermsOfUse": true,
+    "UserMessaging": {
+      "UrlbarInterventions": false,
+      "SkipOnboarding": true,
+      "MoreFromMozilla": false,
+      "FirefoxLabs": false
+    }
+  }
+}

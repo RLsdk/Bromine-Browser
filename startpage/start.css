@@ -1,0 +1,307 @@
+/* Start page — follows active Firefox theme */
+
+:root,
+:root[data-theme="bromine"] {
+  --bg: #161210;
+  --bg-deep: #120e0b;
+  --fg: #f7f1ea;
+  --muted: color-mix(in srgb, var(--fg) 62%, transparent);
+  --accent: #e85d04;
+  --accent-hot: #ff7b1c;
+  --glass: color-mix(in srgb, #2a1f18 78%, transparent);
+  --glass-border: color-mix(in srgb, #f7f1ea 16%, transparent);
+  --shadow: color-mix(in srgb, #000 35%, transparent);
+  --scheme: dark;
+  --search-w: 520px;
+  --search-w-min: 320px;
+  --search-h: 52px;
+  --search-h-min: 44px;
+  font-family: "Segoe UI", "SF Pro Display", "Cantarell", "Noto Sans", system-ui, sans-serif;
+}
+
+:root[data-theme="midnight"] {
+  --bg: #0a0908;
+  --bg-deep: #070605;
+  --fg: #e8e0d8;
+  --muted: color-mix(in srgb, var(--fg) 58%, transparent);
+  --accent: #c44d0a;
+  --accent-hot: #a33d08;
+  --glass: color-mix(in srgb, #141210 82%, transparent);
+  --glass-border: color-mix(in srgb, #e8e0d8 12%, transparent);
+  --shadow: color-mix(in srgb, #000 45%, transparent);
+  --scheme: dark;
+}
+
+:root[data-theme="dark"] {
+  --bg: #1c1b22;
+  --bg-deep: #15141a;
+  --fg: #fbfbfe;
+  --muted: color-mix(in srgb, var(--fg) 60%, transparent);
+  --accent: #0df;
+  --accent-hot: #00b3d4;
+  --glass: color-mix(in srgb, #2b2a33 88%, transparent);
+  --glass-border: color-mix(in srgb, #fbfbfe 14%, transparent);
+  --shadow: color-mix(in srgb, #000 40%, transparent);
+  --scheme: dark;
+}
+
+:root[data-theme="light"] {
+  --bg: #f9f9fb;
+  --bg-deep: #f0f0f4;
+  --fg: #15141a;
+  --muted: color-mix(in srgb, var(--fg) 55%, transparent);
+  --accent: #0060df;
+  --accent-hot: #0250bb;
+  --glass: color-mix(in srgb, #ffffff 92%, transparent);
+  --glass-border: color-mix(in srgb, #15141a 14%, transparent);
+  --shadow: color-mix(in srgb, #15141a 12%, transparent);
+  --scheme: light;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  height: 100%;
+  color: var(--fg);
+  background: var(--bg);
+  background-color: var(--bg);
+  color-scheme: var(--scheme);
+  overflow: hidden;
+}
+
+.bg {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(165deg, var(--bg) 0%, var(--bg-deep) 100%);
+  z-index: 0;
+}
+
+main {
+  position: relative;
+  z-index: 2;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6vh 1.25rem 18vh;
+  text-align: center;
+}
+
+#clock {
+  display: block;
+  font-size: clamp(3.2rem, 10vw, 5.5rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+#date {
+  margin: 0.75rem 0 0;
+  font-size: clamp(0.95rem, 2.2vw, 1.2rem);
+  font-weight: 600;
+  color: var(--muted);
+}
+
+/* Compact by default → expands to max on focus (fixed sizes only) */
+#search {
+  position: relative;
+  margin-top: 2rem;
+  width: min(var(--search-w-min), 92vw);
+  min-width: min(var(--search-w-min), 92vw);
+  max-width: min(var(--search-w), 92vw);
+  height: var(--search-h-min);
+  min-height: var(--search-h-min);
+  max-height: var(--search-h);
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0.3rem 0.3rem 0.3rem 0.35rem;
+  border-radius: 12px;
+  background: var(--glass);
+  backdrop-filter: blur(18px) saturate(1.2);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 28px var(--shadow);
+  transition:
+    width 180ms ease,
+    min-width 180ms ease,
+    height 180ms ease,
+    min-height 180ms ease,
+    padding 180ms ease,
+    border-color 180ms ease;
+}
+
+#search:focus-within,
+#search.is-expanded {
+  width: min(var(--search-w), 92vw);
+  min-width: min(var(--search-w), 92vw);
+  height: var(--search-h);
+  min-height: var(--search-h);
+  padding: 0.35rem 0.35rem 0.35rem 0.4rem;
+  border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+}
+
+.engine-picker {
+  position: relative;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+}
+
+.engine-btn {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  padding: 0;
+  color: var(--fg);
+}
+
+.engine-btn:hover,
+.engine-btn[aria-expanded="true"] {
+  background: color-mix(in srgb, var(--fg) 10%, transparent);
+}
+
+.engine-icon,
+.engine-menu button {
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+}
+
+.engine-icon img,
+.engine-menu button img,
+.engine-icon svg,
+.engine-menu button svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.engine-menu {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 8px);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px;
+  border-radius: 10px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 10px 28px var(--shadow);
+  backdrop-filter: blur(18px) saturate(1.2);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  z-index: 5;
+}
+
+.engine-menu[hidden] {
+  display: none !important;
+}
+
+.engine-menu button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  padding: 0;
+  color: var(--fg);
+}
+
+.engine-menu button:hover,
+.engine-menu button[aria-selected="true"] {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+#q {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 0; /* flex grows into fixed bar — prevents overflow growth */
+  border: 0;
+  background: transparent;
+  color: var(--fg);
+  font-size: 1rem;
+  outline: none;
+  padding: 0.55rem 0.35rem;
+}
+
+#q::placeholder {
+  color: var(--muted);
+}
+
+.icon-btn {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  font-size: 1.15rem;
+  line-height: 1;
+  flex: 0 0 36px;
+}
+
+.icon-btn:hover {
+  color: var(--fg);
+  background: color-mix(in srgb, var(--fg) 10%, transparent);
+}
+
+/* Always reserve clear slot so the bar never jumps */
+.clear-btn {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.clear-btn.is-visible {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.search-divider {
+  width: 1px;
+  height: 22px;
+  margin-inline: 0.15rem 0.3rem;
+  background: color-mix(in srgb, var(--fg) 18%, transparent);
+  flex: 0 0 1px;
+}
+
+.search-submit {
+  background: linear-gradient(145deg, var(--accent), var(--accent-hot));
+  color: #fff;
+}
+
+.search-submit:hover {
+  filter: brightness(1.06);
+}
+
+.credit {
+  position: fixed;
+  left: 14px;
+  bottom: 12px;
+  z-index: 3;
+  margin: 0;
+  font-size: 0.7rem;
+  color: color-mix(in srgb, var(--fg) 40%, transparent);
+}

@@ -1,0 +1,104 @@
+/* Tab chips on the dark strip — beat native
+ * `#tabbrowser-tabs[orient=horizontal] .tabbrowser-tab` flex/transition rules
+ * so open/close never mid-animates into [overflowing] (left-dot + shove).
+ */
+
+#tabbrowser-tabs .tabbrowser-tab,
+#tabbrowser-tabs[orient="horizontal"] .tabbrowser-tab:not([pinned]) {
+  margin-inline: 3px !important;
+  min-width: var(--bromine-tab-min, 76px) !important;
+  width: var(--bromine-tab-width, 150px) !important;
+  max-width: var(--bromine-tab-width, 150px) !important;
+  flex: 0 0 auto !important;
+  transition: none !important;
+}
+
+#tabbrowser-tabs[orient="horizontal"] .tabbrowser-tab:not([pinned])[fadein] {
+  min-width: var(--bromine-tab-min, 76px) !important;
+}
+
+#tabbrowser-tabs[orient="horizontal"] .tabbrowser-tab:not([pinned]):not([fadein]) {
+  /* Keep closing/opening tabs from using native 0.1px flex grow */
+  min-width: 0.1px !important;
+  width: 0.1px !important;
+  max-width: 0.1px !important;
+  flex: 0 0 auto !important;
+  transition: none !important;
+}
+
+.tabbrowser-tab[pinned] {
+  min-width: 36px !important;
+  width: 36px !important;
+  max-width: 36px !important;
+  flex: 0 0 auto !important;
+}
+
+.tab-background {
+  border-radius: 8px !important;
+  margin-block: 5px !important;
+  margin-inline: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  background: var(--bromine-tab-inactive) !important;
+  /* no transition — avoids paint work on every tab select/open */
+}
+
+.tabbrowser-tab:hover .tab-background {
+  background: color-mix(in srgb, var(--bromine-fg) 12%, transparent) !important;
+}
+
+.tabbrowser-tab[selected] .tab-background,
+.tabbrowser-tab[visuallyselected] .tab-background {
+  background: var(--bromine-tab-active) !important;
+  box-shadow: none !important;
+}
+
+.tab-label {
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  color: var(--bromine-chrome-label) !important;
+}
+
+.tabbrowser-tab[selected] .tab-label,
+.tabbrowser-tab[visuallyselected] .tab-label {
+  color: var(--bromine-chrome-label-active) !important;
+}
+
+.tab-icon-image {
+  width: 16px !important;
+  height: 16px !important;
+  margin-inline-end: 6px !important;
+}
+
+.tabbrowser-tab:not([selected]):not(:hover) .tab-close-button {
+  display: none !important;
+}
+
+.tab-close-button {
+  fill: var(--bromine-chrome-ink-soft) !important;
+  -moz-context-properties: fill !important;
+}
+
+:root[bromine-tabs="pill"] .tab-background {
+  border-radius: 999px !important;
+}
+
+:root[bromine-tabs="minimal"] .tabbrowser-tab:not([selected]) .tab-background {
+  background: transparent !important;
+}
+
+:root[bromine-tabs="underline"] .tabbrowser-tab[selected] .tab-background {
+  box-shadow: inset 0 -2px 0 var(--bromine-accent) !important;
+}
+
+:root[bromine-hide-single-tab="true"] #tabbrowser-tabs:not([overflow]) .tabbrowser-tab:only-of-type {
+  visibility: hidden !important;
+  max-width: 0 !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+#tabs-newtab-button:hover {
+  background-color: color-mix(in srgb, var(--bromine-fg) 12%, transparent) !important;
+}
