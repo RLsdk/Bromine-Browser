@@ -32,3 +32,5 @@ patchfail-fuzz.out
 
 # Local caches
 .cache/
+__pycache__/
+*.pyc
